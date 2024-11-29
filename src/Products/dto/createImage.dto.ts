@@ -1,8 +1,8 @@
-import { IsNotEmpty, IsString, IsUrl } from "class-validator";
+import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
 
-export class createImageDto{
-    @IsString()
-    @IsNotEmpty()
-    @IsUrl()
-    image: string
+export class createImageDto {
+  @IsString()
+  @IsNotEmpty()
+  @IsUrl()
+  image: string;
 }

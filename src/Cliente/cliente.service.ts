@@ -10,12 +10,32 @@ export class ClientService {
 
   async createClient(data: CreateClientDto) {
     try {
-      const cep = await createOrUpdate(this.prisma.cepCli, { cep: data.addressCli.cep.cep }, { cep: data.addressCli.cep.cep });
-      const street = await createOrUpdate(this.prisma.streetCli, { street: data.addressCli.street.street }, { street: data.addressCli.street.street });
-      const city = await createOrUpdate(this.prisma.cityCli, { city: data.addressCli.city.city }, { city: data.addressCli.city.city });
-      const state = await createOrUpdate(this.prisma.stateCli, { state: data.addressCli.state.state }, { state: data.addressCli.state.state });
-      const bairro = await createOrUpdate(this.prisma.bairroCli, { bairro: data.addressCli.bairro.bairro }, { bairro: data.addressCli.bairro.bairro });
-  
+      const cep = await createOrUpdate(
+        this.prisma.cepCli,
+        { cep: data.addressCli.cep.cep },
+        { cep: data.addressCli.cep.cep },
+      );
+      const street = await createOrUpdate(
+        this.prisma.streetCli,
+        { street: data.addressCli.street.street },
+        { street: data.addressCli.street.street },
+      );
+      const city = await createOrUpdate(
+        this.prisma.cityCli,
+        { city: data.addressCli.city.city },
+        { city: data.addressCli.city.city },
+      );
+      const state = await createOrUpdate(
+        this.prisma.stateCli,
+        { state: data.addressCli.state.state },
+        { state: data.addressCli.state.state },
+      );
+      const bairro = await createOrUpdate(
+        this.prisma.bairroCli,
+        { bairro: data.addressCli.bairro.bairro },
+        { bairro: data.addressCli.bairro.bairro },
+      );
+
       let address = await this.prisma.addressCli.findFirst({
         where: {
           num: data.addressCli.num,
@@ -27,7 +47,7 @@ export class ClientService {
           bairroCliId: bairro.id,
         },
       });
-  
+
       if (!address) {
         address = await this.prisma.addressCli.create({
           data: {
@@ -41,7 +61,7 @@ export class ClientService {
           },
         });
       }
-  
+
       return this.prisma.client.create({
         data: {
           name: data.name,
@@ -67,18 +87,38 @@ export class ClientService {
         },
       });
     } catch (error) {
-      throw new NotFoundException('Error creating client or address: ' + error.message);
+      throw new NotFoundException(
+        'Error creating client or address: ' + error.message,
+      );
     }
   }
-  
 
   async updateCliente(id: string, data: UpdateClientDto) {
-
-    const cep = await createOrUpdate(this.prisma.cepCli, { cep: data.addressCli.cep.cep }, { cep: data.addressCli.cep.cep });
-    const street = await createOrUpdate(this.prisma.streetCli, { street: data.addressCli.street.street }, { street: data.addressCli.street.street });
-    const city = await createOrUpdate(this.prisma.cityCli, { city: data.addressCli.city.city }, { city: data.addressCli.city.city });
-    const state = await createOrUpdate(this.prisma.stateCli, { state: data.addressCli.state.state }, { state: data.addressCli.state.state });
-    const bairro = await createOrUpdate(this.prisma.bairroCli, { bairro: data.addressCli.bairro.bairro }, { bairro: data.addressCli.bairro.bairro });
+    const cep = await createOrUpdate(
+      this.prisma.cepCli,
+      { cep: data.addressCli.cep.cep },
+      { cep: data.addressCli.cep.cep },
+    );
+    const street = await createOrUpdate(
+      this.prisma.streetCli,
+      { street: data.addressCli.street.street },
+      { street: data.addressCli.street.street },
+    );
+    const city = await createOrUpdate(
+      this.prisma.cityCli,
+      { city: data.addressCli.city.city },
+      { city: data.addressCli.city.city },
+    );
+    const state = await createOrUpdate(
+      this.prisma.stateCli,
+      { state: data.addressCli.state.state },
+      { state: data.addressCli.state.state },
+    );
+    const bairro = await createOrUpdate(
+      this.prisma.bairroCli,
+      { bairro: data.addressCli.bairro.bairro },
+      { bairro: data.addressCli.bairro.bairro },
+    );
 
     let address;
     if (data.addressCli.id) {
@@ -123,7 +163,7 @@ export class ClientService {
     }
 
     return this.prisma.client.update({
-      where: {id},
+      where: { id },
       data: {
         name: data.name,
         email: data.email,
@@ -160,7 +200,7 @@ export class ClientService {
     }
 
     await this.prisma.client.delete({
-      where: { id }
+      where: { id },
     });
 
     if (client.addressCli) {
@@ -171,8 +211,8 @@ export class ClientService {
           cepCli: true,
           cityCli: true,
           stateCli: true,
-          streetCli: true          
-        }
+          streetCli: true,
+        },
       });
     }
 
@@ -208,25 +248,27 @@ export class ClientService {
   }
 
   async deleteAddress(id: string) {
-    const numericId = parseInt(id, 10); 
-  
+    const numericId = parseInt(id, 10);
+
     const addressCli = await this.prisma.addressCli.findUnique({
-      where: { id: numericId }, 
+      where: { id: numericId },
       include: { client: true },
     });
-  
+
     if (!addressCli) {
       throw new NotFoundException('Endereço não encontrado');
     }
-  
+
     if (addressCli.client && addressCli.client.length > 0) {
-      throw new Error('Endereço não foi deletado porque está associado a um usuário');
+      throw new Error(
+        'Endereço não foi deletado porque está associado a um usuário',
+      );
     }
-  
+
     await this.prisma.addressCli.delete({
-      where: { id: numericId }, 
+      where: { id: numericId },
     });
-  
+
     return addressCli;
   }
 }

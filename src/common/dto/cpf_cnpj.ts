@@ -1,4 +1,9 @@
-import { registerDecorator, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
+import {
+  registerDecorator,
+  ValidationOptions,
+  ValidatorConstraint,
+  ValidatorConstraintInterface,
+} from 'class-validator';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 @ValidatorConstraint({ async: false })
@@ -13,7 +18,7 @@ class IsCPFOrCNPJConstraint implements ValidatorConstraintInterface {
 }
 
 export function IsCPFOrCNPJ(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
@@ -23,7 +28,3 @@ export function IsCPFOrCNPJ(validationOptions?: ValidationOptions) {
     });
   };
 }
-
-
-
-

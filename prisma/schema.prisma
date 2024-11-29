@@ -4,36 +4,40 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://matteus:250320@localhost:5432/roseanne"
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-EMPLOYEE-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+enum UserRole {
+  Admin
+  User
+}
 
 model Employee {
-  id        String @id @unique @default(uuid()) 
+  id        String   @id @unique @default(uuid())
   name      String
-  email     String @unique
-  cpf       String @unique
-  telephone String @unique
+  email     String   @unique
+  cpf       String   @unique
+  telephone String   @unique
   niver     String
   roleId    Int
   addressId Int
   timeId    Int
   wageId    Int
-  createdAt DateTime @default(now())  
-  updatedAt DateTime @updatedAt 
-  
-  role      Role     @relation(fields: [roleId], references: [id])
-  address   Address  @relation(fields: [addressId], references: [id])
-  time      Time     @relation(fields: [timeId], references: [id])
-  wage      Wage     @relation(fields: [wageId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  role    Role    @relation(fields: [roleId], references: [id])
+  address Address @relation(fields: [addressId], references: [id])
+  time    Time    @relation(fields: [timeId], references: [id])
+  wage    Wage    @relation(fields: [wageId], references: [id])
 
   @@map("employee")
 }
 
 model Address {
-  id         Int       @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   num        String
   complement String?
   streetId   Int
@@ -41,77 +45,78 @@ model Address {
   bairroId   Int
   stateId    Int
   cityId     Int
-  
-  street     Street    @relation(fields: [streetId], references: [id])
-  cep        Cep       @relation(fields: [cepId], references: [id])
-  bairro     Bairro    @relation(fields: [bairroId], references: [id])
-  state      State     @relation(fields: [stateId], references: [id])
-  city       City      @relation(fields: [cityId], references: [id])
-  
 
-  Employee   Employee[]
+  street Street @relation(fields: [streetId], references: [id])
+  cep    Cep    @relation(fields: [cepId], references: [id])
+  bairro Bairro @relation(fields: [bairroId], references: [id])
+  state  State  @relation(fields: [stateId], references: [id])
+  city   City   @relation(fields: [cityId], references: [id])
+
+  Employee Employee[]
 }
 
 model Street {
   id     Int    @id @default(autoincrement())
   street String @unique
-  
+
   Address Address[]
 }
 
 model Cep {
   id  Int    @id @default(autoincrement())
   cep String @unique
-  
+
   Address Address[]
 }
+
 model Bairro {
   id     Int    @id @default(autoincrement())
   bairro String @unique
-  
+
   Address Address[]
 }
 
 model State {
-  id  Int      @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   state String @unique
-  
+
   Address Address[]
 }
 
 model City {
-  id  Int     @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   city String @unique
-  
+
   Address Address[]
 }
 
 model Role {
-  id Int @id @default(autoincrement())
-  role String @unique
+  id   Int      @id @default(autoincrement())
+  role UserRole @unique
 
   employee Employee[]
 }
 
 model Time {
-  id Int @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   time String @unique
 
   employee Employee[]
 }
+
 model Wage {
-  id Int @id @default(autoincrement())
+  id     Int   @id @default(autoincrement())
   amount Float @unique
-  
+
   employee Employee[]
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-PRODUCTS-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 model Products {
-  id String @id @unique @default(uuid()) 
-  name         String 
-  code         String @unique
+  id           String   @id @unique @default(uuid())
+  name         String
+  code         String   @unique
   size         String
   description  String
   amount       Int
@@ -121,87 +126,86 @@ model Products {
   imageId      Int
   spentValueId Int
   statusId     Int
-  createdAt    DateTime @default(now())  
-  updatedAt    DateTime @updatedAt 
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
-  rental       Rental     @relation(fields: [rentalId], references: [id])
-  category     Category   @relation(fields: [categoryId], references: [id])
-  color        Color      @relation(fields: [colorId], references: [id])
-  image        Image      @relation(fields: [imageId], references: [id])
-  spentValue   SpentValue @relation(fields: [spentValueId], references: [id])
-  status       Status     @relation(fields: [statusId], references: [id])
+  rental     Rental     @relation(fields: [rentalId], references: [id])
+  category   Category   @relation(fields: [categoryId], references: [id])
+  color      Color      @relation(fields: [colorId], references: [id])
+  image      Image      @relation(fields: [imageId], references: [id])
+  spentValue SpentValue @relation(fields: [spentValueId], references: [id])
+  status     Status     @relation(fields: [statusId], references: [id])
 
   @@map("products")
 }
 
 model Rental {
-  id Int @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   rental String @unique
 
   products Products[]
 }
 
 model Category {
-  id Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
   category String @unique
 
   products Products[]
 }
 
 model Color {
-  id Int @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   color String @unique
 
   products Products[]
 }
 
 model Image {
-  id Int @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   image String @unique
 
   products Products[]
 }
 
 model SpentValue {
-  id Int @id @default(autoincrement())
+  id         Int @id @default(autoincrement())
   spentValue Int @unique
 
   products Products[]
 }
 
 model Status {
-  id Int @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   status String @unique
 
   products Products[]
 }
 
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-CLIENTS-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 model client {
-  id           String  @id @unique @default(uuid())
+  id           String   @id @unique @default(uuid())
   name         String
-  email        String  @unique
-  instagram    String? @unique
-  telephone_1  String  @unique
-  telephone_2  String? @unique
+  email        String   @unique
+  instagram    String?  @unique
+  telephone_1  String   @unique
+  telephone_2  String?  @unique
   niver        String
-  rg           String  @unique
-  cpf_cnpj     String  @unique
+  rg           String   @unique
+  cpf_cnpj     String   @unique
   addressCliId Int
   // contractsId  Int
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  addressCli     AddressCli @relation(fields: [addressCliId], references: [id])
+  addressCli AddressCli @relation(fields: [addressCliId], references: [id])
   // contracts      Contracts  @relation(fields: [contractsId], references: [id])
 
   @@map("client")
 }
 
 model AddressCli {
-  id          Int @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   num         String
   complement  String?
   streetCliId Int
@@ -209,53 +213,53 @@ model AddressCli {
   bairroCliId Int
   stateCliId  Int
   cityCliId   Int
-  
-  streetCli   StreetCli @relation(fields: [streetCliId], references: [id])
-  cepCli      CepCli    @relation(fields: [cepCliId], references: [id])
-  bairroCli   BairroCli @relation(fields: [bairroCliId], references: [id])
-  stateCli    StateCli  @relation(fields: [stateCliId], references: [id])
-  cityCli     CityCli   @relation(fields: [cityCliId], references: [id])
-  
+
+  streetCli StreetCli @relation(fields: [streetCliId], references: [id])
+  cepCli    CepCli    @relation(fields: [cepCliId], references: [id])
+  bairroCli BairroCli @relation(fields: [bairroCliId], references: [id])
+  stateCli  StateCli  @relation(fields: [stateCliId], references: [id])
+  cityCli   CityCli   @relation(fields: [cityCliId], references: [id])
+
   client client[]
+
   @@map("addressCli")
 }
 
 model StreetCli {
   id     Int    @id @default(autoincrement())
   street String @unique
-  
+
   AddressCli AddressCli[]
 }
 
 model CepCli {
   id  Int    @id @default(autoincrement())
   cep String @unique
-  
+
   AddressCli AddressCli[]
 }
+
 model BairroCli {
   id     Int    @id @default(autoincrement())
   bairro String @unique
-  
+
   AddressCli AddressCli[]
 }
 
 model StateCli {
-  id  Int      @id @default(autoincrement())
+  id    Int    @id @default(autoincrement())
   state String @unique
-  
+
   AddressCli AddressCli[]
 }
 
 model CityCli {
-  id  Int     @id @default(autoincrement())
+  id   Int    @id @default(autoincrement())
   city String @unique
-  
+
   AddressCli AddressCli[]
 }
 
 // model Contracts {
 //   id Int @id @default(autoincrement())
 // }
-
-

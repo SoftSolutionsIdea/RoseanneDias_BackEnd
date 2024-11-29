@@ -9,15 +9,47 @@ export class EmployeeService {
   constructor(private prisma: PrismaService) {}
 
   async createEmployee(data: CreateEmployeeDto) {
-    const wage = await createOrUpdate(this.prisma.wage, { amount: data.wage.amount }, { amount: data.wage.amount });
-    const time = await createOrUpdate(this.prisma.time, { time: data.time.time }, { time: data.time.time });
-    const role = await createOrUpdate(this.prisma.role, { role: data.role.role }, { role: data.role.role });
-    const cep = await createOrUpdate(this.prisma.cep, { cep: data.address.cep.cep }, { cep: data.address.cep.cep });
-    const street = await createOrUpdate(this.prisma.street, { street: data.address.street.street }, { street: data.address.street.street });
-    const city = await createOrUpdate(this.prisma.city, { city: data.address.city.city }, { city: data.address.city.city });
-    const state = await createOrUpdate(this.prisma.state, { state: data.address.state.state }, { state: data.address.state.state });
-    const bairro = await createOrUpdate(this.prisma.bairro, { bairro: data.address.bairro.bairro }, { bairro: data.address.bairro.bairro });
-  
+    const wage = await createOrUpdate(
+      this.prisma.wage,
+      { amount: data.wage.amount },
+      { amount: data.wage.amount },
+    );
+    const time = await createOrUpdate(
+      this.prisma.time,
+      { time: data.time.time },
+      { time: data.time.time },
+    );
+    const role = await createOrUpdate(
+      this.prisma.role,
+      { role: data.role.role },
+      { role: data.role.role },
+    );
+    const cep = await createOrUpdate(
+      this.prisma.cep,
+      { cep: data.address.cep.cep },
+      { cep: data.address.cep.cep },
+    );
+    const street = await createOrUpdate(
+      this.prisma.street,
+      { street: data.address.street.street },
+      { street: data.address.street.street },
+    );
+    const city = await createOrUpdate(
+      this.prisma.city,
+      { city: data.address.city.city },
+      { city: data.address.city.city },
+    );
+    const state = await createOrUpdate(
+      this.prisma.state,
+      { state: data.address.state.state },
+      { state: data.address.state.state },
+    );
+    const bairro = await createOrUpdate(
+      this.prisma.bairro,
+      { bairro: data.address.bairro.bairro },
+      { bairro: data.address.bairro.bairro },
+    );
+
     let address = await this.prisma.address.findFirst({
       where: {
         num: data.address.num,
@@ -29,7 +61,7 @@ export class EmployeeService {
         bairroId: bairro.id,
       },
     });
-  
+
     if (!address) {
       address = await this.prisma.address.create({
         data: {
@@ -43,6 +75,10 @@ export class EmployeeService {
         },
       });
     }
+    console.log('Creating or updating wage:', data.wage);
+    console.log('Creating or updating time:', data.time);
+    console.log('Creating or updating role:', data.role);
+    console.log('Creating or updating address:', data.address);
 
     return this.prisma.employee.create({
       data: {
@@ -74,15 +110,46 @@ export class EmployeeService {
   }
 
   async updateEmployee(id: string, data: updateEmployeeDto) {
-
-    const wage = await createOrUpdate(this.prisma.wage, { amount: data.wage.amount }, { amount: data.wage.amount });
-    const time = await createOrUpdate(this.prisma.time, { time: data.time.time }, { time: data.time.time });
-    const role = await createOrUpdate(this.prisma.role, { role: data.role.role }, { role: data.role.role });
-    const cep = await createOrUpdate(this.prisma.cep, { cep: data.address.cep.cep }, { cep: data.address.cep.cep });
-    const street = await createOrUpdate(this.prisma.street, { street: data.address.street.street }, { street: data.address.street.street });
-    const city = await createOrUpdate(this.prisma.city, { city: data.address.city.city }, { city: data.address.city.city });
-    const state = await createOrUpdate(this.prisma.state, { state: data.address.state.state }, { state: data.address.state.state });
-    const bairro = await createOrUpdate(this.prisma.bairro, { bairro: data.address.bairro.bairro }, { bairro: data.address.bairro.bairro });
+    const wage = await createOrUpdate(
+      this.prisma.wage,
+      { amount: data.wage.amount },
+      { amount: data.wage.amount },
+    );
+    const time = await createOrUpdate(
+      this.prisma.time,
+      { time: data.time.time },
+      { time: data.time.time },
+    );
+    const role = await createOrUpdate(
+      this.prisma.role,
+      { role: data.role.role },
+      { role: data.role.role },
+    );
+    const cep = await createOrUpdate(
+      this.prisma.cep,
+      { cep: data.address.cep.cep },
+      { cep: data.address.cep.cep },
+    );
+    const street = await createOrUpdate(
+      this.prisma.street,
+      { street: data.address.street.street },
+      { street: data.address.street.street },
+    );
+    const city = await createOrUpdate(
+      this.prisma.city,
+      { city: data.address.city.city },
+      { city: data.address.city.city },
+    );
+    const state = await createOrUpdate(
+      this.prisma.state,
+      { state: data.address.state.state },
+      { state: data.address.state.state },
+    );
+    const bairro = await createOrUpdate(
+      this.prisma.bairro,
+      { bairro: data.address.bairro.bairro },
+      { bairro: data.address.bairro.bairro },
+    );
 
     let address;
     if (data.address.id) {
@@ -134,7 +201,7 @@ export class EmployeeService {
         cpf: data.cpf,
         telephone: data.telephone,
         niver: data.niver,
-        roleId: role.id ,
+        roleId: role.id,
         addressId: address.id,
         timeId: time.id,
         wageId: wage.id,
@@ -150,9 +217,9 @@ export class EmployeeService {
             city: true,
             state: true,
             street: true,
-          }
-        }
-      }
+          },
+        },
+      },
     });
   }
 
@@ -171,8 +238,8 @@ export class EmployeeService {
       include: {
         role: true,
         wage: true,
-        time: true
-      }
+        time: true,
+      },
     });
 
     if (employee.address) {
@@ -183,8 +250,8 @@ export class EmployeeService {
           cep: true,
           city: true,
           state: true,
-          street: true          
-        }
+          street: true,
+        },
       });
     }
 
@@ -222,27 +289,28 @@ export class EmployeeService {
     });
   }
 
-  
   async deleteAddress(id: string) {
-    const numericId = parseInt(id, 10); 
-  
+    const numericId = parseInt(id, 10);
+
     const address = await this.prisma.address.findUnique({
-      where: { id: numericId }, 
+      where: { id: numericId },
       include: { Employee: true },
     });
-  
+
     if (!address) {
       throw new NotFoundException('Endereço não encontrado');
     }
-  
+
     if (address.Employee && address.Employee.length > 0) {
-      throw new Error('Endereço não foi deletado porque está associado a um funcionário');
+      throw new Error(
+        'Endereço não foi deletado porque está associado a um funcionário',
+      );
     }
-  
+
     await this.prisma.address.delete({
-      where: { id: numericId }, 
+      where: { id: numericId },
     });
-  
+
     return address;
   }
 }

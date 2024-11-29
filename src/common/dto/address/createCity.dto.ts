@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateCityDto {
-    @IsString()
-    @IsNotEmpty()
-    city: string;
+  @IsString()
+  @IsNotEmpty()
+  city: string;
 }

@@ -1,20 +1,30 @@
-import { Controller, Post, Body, Get, Param, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { CreateEmployeeDto } from './dto/createEmployee.dto';
 import { updateEmployeeDto } from './dto/updateEmployee.dto';
 
-
 @Controller('employee')
 export class EmployeeController {
-  constructor(private readonly employeeService: EmployeeService ) {}
+  constructor(private readonly employeeService: EmployeeService) {}
 
-  @Post("register")
+  @Post('register')
   async create(@Body() createEmployeeDto: CreateEmployeeDto) {
     return await this.employeeService.createEmployee(createEmployeeDto);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateEmployeeDto: updateEmployeeDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateEmployeeDto: updateEmployeeDto,
+  ) {
     return await this.employeeService.updateEmployee(id, updateEmployeeDto);
   }
 
