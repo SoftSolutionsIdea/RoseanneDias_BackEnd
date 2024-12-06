@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
 
 export class createSpentValueDto {
   @IsNumber()
   @IsNotEmpty()
-  spentValue: number;
+  spentValue: number
 }

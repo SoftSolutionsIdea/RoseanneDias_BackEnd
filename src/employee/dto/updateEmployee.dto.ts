@@ -5,51 +5,51 @@ import {
   IsString,
   ValidateNested,
   IsNumber,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { CreateRoleDto } from './createRole.dto';
-import { CreateAddressDto } from '../../common/dto/address/createAddress.dto';
-import { CreateTimeDto } from './createTime.dto';
-import { CreateWageDto } from './createWage.dto';
+} from 'class-validator'
+import { Type } from 'class-transformer'
+import { CreateRoleDto } from './createRole.dto'
+import { CreateAddressDto } from '../../common/dto/address/createAddress.dto'
+import { CreateTimeDto } from './createTime.dto'
+import { CreateWageDto } from './createWage.dto'
 
 export class updateEmployeeDto {
   @IsString()
   @IsOptional()
-  name?: string;
+  name?: string
 
   @IsEmail()
   @IsOptional()
-  email?: string;
+  email?: string
 
   @IsString()
   @IsOptional()
-  cpf?: string;
+  cpf?: string
 
   @IsString()
   @IsOptional()
-  telephone?: string;
+  telephone?: string
 
   @IsString()
   @IsOptional()
-  niver?: string;
+  niver?: string
 
   @ValidateNested()
   @IsOptional()
   @Type(() => CreateRoleDto)
-  role?: CreateRoleDto;
+  role?: CreateRoleDto
 
   @ValidateNested()
   @IsOptional()
   @Type(() => CreateAddressDto)
-  address?: CreateAddressDto;
+  address?: CreateAddressDto
 
   @ValidateNested()
   @IsOptional()
   @Type(() => CreateTimeDto)
-  time?: CreateTimeDto;
+  time?: CreateTimeDto
 
   @ValidateNested()
   @IsOptional()
   @Type(() => CreateWageDto)
-  wage?: CreateWageDto;
+  wage?: CreateWageDto
 }

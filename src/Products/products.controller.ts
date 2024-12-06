@@ -1,15 +1,7 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-  Put,
-} from '@nestjs/common';
-import { ProductsService } from './products.service';
-import { CreateProductsDto } from './dto/createProducts.dto';
-import { updateProductsDto } from './dto/updateProducts.dto';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
+import { ProductsService } from './products.service'
+import { CreateProductsDto } from './dto/createProducts.dto'
+import { updateProductsDto } from './dto/updateProducts.dto'
 
 @Controller('products')
 export class ProductsController {
@@ -17,7 +9,7 @@ export class ProductsController {
 
   @Post('register')
   async create(@Body() createProductsDto: CreateProductsDto) {
-    return await this.productsService.createProducts(createProductsDto);
+    return await this.productsService.createProducts(createProductsDto)
   }
 
   @Put(':id')
@@ -25,16 +17,16 @@ export class ProductsController {
     @Param('id') id: string,
     @Body() updateProductsDto: updateProductsDto,
   ) {
-    return await this.productsService.updateProducts(id, updateProductsDto);
+    return await this.productsService.updateProducts(id, updateProductsDto)
   }
 
   @Get()
   async getAllProducts() {
-    return this.productsService.findAllProducts();
+    return this.productsService.findAllProducts()
   }
 
   @Delete(':id')
   async deleteProduct(@Param('id') id: string) {
-    return this.productsService.deleteProduct(id);
+    return this.productsService.deleteProduct(id)
   }
 }

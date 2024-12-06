@@ -20,7 +20,7 @@ export const PrismaErrors = {
       'A solicitação não pode ser completada, pois o registro não foi encontrado',
   },
   DEFAULT: 'Um erro não conhecido',
-};
+}
 
 export const HttpErrors = {
   BAD_REQUEST: {
@@ -72,4 +72,4 @@ export const HttpErrors = {
     message:
       'O servidor demorou muito para responder. Por favor, tente novamente mais tarde',
   },
-};
+}

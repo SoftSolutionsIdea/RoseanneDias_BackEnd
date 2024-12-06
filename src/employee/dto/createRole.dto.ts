@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator'
 enum UserRole {
   Admin = 'Admin',
   User = 'User',
@@ -7,5 +7,5 @@ enum UserRole {
 export class CreateRoleDto {
   @IsString()
   @IsNotEmpty()
-  role: UserRole;
+  role: UserRole
 }

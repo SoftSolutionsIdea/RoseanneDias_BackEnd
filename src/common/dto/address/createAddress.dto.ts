@@ -3,43 +3,43 @@ import {
   IsOptional,
   IsString,
   ValidateNested,
-} from 'class-validator';
-import { Type } from 'class-transformer';
-import { CreateBairroDto } from './createBairro.dto';
-import { CreateStateDto } from './createState.dto';
-import { CreateCityDto } from './createCity.dto';
-import { CreateCepDto } from './createCep.dto';
-import { CreateStreetDto } from './createStreet.dto';
+} from 'class-validator'
+import { Type } from 'class-transformer'
+import { CreateBairroDto } from './createBairro.dto'
+import { CreateStateDto } from './createState.dto'
+import { CreateCityDto } from './createCity.dto'
+import { CreateCepDto } from './createCep.dto'
+import { CreateStreetDto } from './createStreet.dto'
 
 export class CreateAddressDto {
   @IsOptional()
-  id?: number;
+  id?: number
 
   @IsString()
   @IsNotEmpty()
-  num: string;
+  num: string
 
   @IsString()
   @IsOptional()
-  complement?: string;
+  complement?: string
 
   @ValidateNested()
   @Type(() => CreateCepDto)
-  cep: CreateCepDto;
+  cep: CreateCepDto
 
   @ValidateNested()
   @Type(() => CreateStreetDto)
-  street: CreateStreetDto;
+  street: CreateStreetDto
 
   @ValidateNested()
   @Type(() => CreateBairroDto)
-  bairro: CreateBairroDto;
+  bairro: CreateBairroDto
 
   @ValidateNested()
   @Type(() => CreateStateDto)
-  state: CreateStateDto;
+  state: CreateStateDto
 
   @ValidateNested()
   @Type(() => CreateCityDto)
-  city: CreateCityDto;
+  city: CreateCityDto
 }

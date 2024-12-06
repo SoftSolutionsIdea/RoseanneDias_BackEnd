@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Post,
-  Body,
-  Get,
-  Param,
-  Put,
-  Delete,
-} from '@nestjs/common';
-import { ClientService } from './cliente.service';
-import { CreateClientDto } from './dto/createClient.dto';
-import { UpdateClientDto } from './dto/updateCliente.dto';
+import { Controller, Post, Body, Get, Param, Put, Delete } from '@nestjs/common'
+import { ClientService } from './cliente.service'
+import { CreateClientDto } from './dto/createClient.dto'
+import { UpdateClientDto } from './dto/updateCliente.dto'
 
 @Controller('client')
 export class ClientController {
@@ -17,7 +9,7 @@ export class ClientController {
 
   @Post('register')
   async create(@Body() createClientDto: CreateClientDto) {
-    return await this.clientService.createClient(createClientDto);
+    return await this.clientService.createClient(createClientDto)
   }
 
   @Put(':id')
@@ -25,26 +17,26 @@ export class ClientController {
     @Param('id') id: string,
     @Body() updateClientDto: UpdateClientDto,
   ) {
-    return await this.clientService.updateCliente(id, updateClientDto);
+    return await this.clientService.updateCliente(id, updateClientDto)
   }
 
   @Get()
   async findAll() {
-    return await this.clientService.findAllClient();
+    return await this.clientService.findAllClient()
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return await this.clientService.deleteClient(id);
+    return await this.clientService.deleteClient(id)
   }
 
   @Get('address')
   async findAllAddresses() {
-    return await this.clientService.findAllAddresses();
+    return await this.clientService.findAllAddresses()
   }
 
   @Delete('address/:id')
   async deleteAddress(@Param('id') id: string) {
-    return await this.clientService.deleteAddress(id);
+    return await this.clientService.deleteAddress(id)
   }
 }
