@@ -2,76 +2,96 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
+  HttpException,
   HttpStatus,
+  UnauthorizedException,
 } from '@nestjs/common'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
-import { HttpErrors, PrismaErrors } from './globalErrors'
+import { GlobalErrors } from './globalErrors' // Importando o arquivo único de erros
 
 @Catch()
 export class ErrorsFilter implements ExceptionFilter {
-  catch(exception: PrismaClientKnownRequestError, host: ArgumentsHost) {
+  catch(
+    exception: Error | PrismaClientKnownRequestError | HttpException,
+    host: ArgumentsHost,
+  ) {
     const context = host.switchToHttp()
     const response = context.getResponse()
 
+    // Status e mensagem padrão
     let status = HttpStatus.INTERNAL_SERVER_ERROR
     let message = 'Estamos nos mobilizando para solucionar este erro'
 
-    // Erros do Prisma
+    if (exception instanceof UnauthorizedException) {
+      status = HttpStatus.UNAUTHORIZED
+      message =
+        exception.message || 'Credenciais inválidas ou usuário não encontrado'
+    }
+
+    // Verificando se é um erro do Prisma
     if (exception instanceof PrismaClientKnownRequestError) {
       status = HttpStatus.CONFLICT
       if (exception.code === 'P2002') {
         const field = exception.meta?.target?.[0]
-        message = PrismaErrors.P2002.fields[field] || PrismaErrors.P2002.default
+        message =
+          GlobalErrors.PrismaErrors.P2002.fields[field] ||
+          GlobalErrors.PrismaErrors.P2002.default
       } else if (exception.code === 'P2025') {
-        message = PrismaErrors.P2025.message
+        message = GlobalErrors.PrismaErrors.P2025.message
+      } else {
+        message = GlobalErrors.PrismaErrors.DEFAULT
       }
     }
 
-    // Erros do HTTP
-    if (exception instanceof Error) {
-      switch (exception.message) {
-        case 'BAD_REQUEST':
-          status = HttpErrors.BAD_REQUEST.code
-          message = HttpErrors.BAD_REQUEST.message
-          break
+    // Verificando se é uma exceção HTTP (HttpException)
+    if (exception instanceof HttpException) {
+      status = exception.getStatus() // Pegando o código de status HTTP
 
-        case 'NOT_FOUND':
-          status = HttpErrors.NOT_FOUND.code
-          message = HttpErrors.NOT_FOUND.message
-          break
+      // Obtendo a resposta da exceção
+      const responseMessage = exception.getResponse()
 
-        case 'NOT_IMPLEMENTED':
-          status = HttpErrors.NOT_IMPLEMENTED.code
-          message = HttpErrors.NOT_IMPLEMENTED.message
-          break
+      // Verificando se a resposta é uma string ou um objeto
+      if (typeof responseMessage === 'string') {
+        message = responseMessage // Se for uma string, usamos diretamente
+      } else if (
+        typeof responseMessage === 'object' &&
+        'message' in responseMessage
+      ) {
+        // Se for um objeto e contiver a propriedade "message", usamos essa mensagem
+        message = (responseMessage as { message: string }).message
+      }
 
-        case 'BAD_GATEWAY':
-          status = HttpErrors.BAD_GATEWAY.code
-          message = HttpErrors.BAD_GATEWAY.message
-          break
-
-        case 'SERVICE_UNAVAILABLE':
-          status = HttpErrors.SERVICE_UNAVAILABLE.code
-          message = HttpErrors.SERVICE_UNAVAILABLE.message
-          break
-
-        case 'GATEWAY_TIMEOUT':
-          status = HttpErrors.GATEWAY_TIMEOUT.code
-          message = HttpErrors.GATEWAY_TIMEOUT.message
-          break
-
-        case 'UNAUTHORIZED':
-          status = HttpErrors.UNAUTHORIZED.code
-          message = HttpErrors.UNAUTHORIZED.message
-          break
-
-        case 'FORBIDDEN':
-          status = HttpErrors.FORBIDDEN.code
-          message = HttpErrors.FORBIDDEN.message
-          break
+      // Tratamento específico para os erros HTTP usando GlobalErrors
+      if (status === HttpStatus.BAD_REQUEST) {
+        message = GlobalErrors.HttpErrors.BAD_REQUEST.message
+      }
+      if (status === HttpStatus.UNAUTHORIZED) {
+        message = GlobalErrors.HttpErrors.UNAUTHORIZED.message
+      }
+      if (status === HttpStatus.FORBIDDEN) {
+        message = GlobalErrors.HttpErrors.FORBIDDEN.message
+      }
+      if (status === HttpStatus.NOT_FOUND) {
+        message = GlobalErrors.HttpErrors.NOT_FOUND.message
+      }
+      if (status === HttpStatus.INTERNAL_SERVER_ERROR) {
+        message = GlobalErrors.HttpErrors.INTERNAL_ERRO_SERVER.message
+      }
+      if (status === HttpStatus.NOT_IMPLEMENTED) {
+        message = GlobalErrors.HttpErrors.NOT_IMPLEMENTED.message
+      }
+      if (status === HttpStatus.BAD_GATEWAY) {
+        message = GlobalErrors.HttpErrors.BAD_GATEWAY.message
+      }
+      if (status === HttpStatus.SERVICE_UNAVAILABLE) {
+        message = GlobalErrors.HttpErrors.SERVICE_UNAVAILABLE.message
+      }
+      if (status === HttpStatus.GATEWAY_TIMEOUT) {
+        message = GlobalErrors.HttpErrors.GATEWAY_TIMEOUT.message
       }
     }
 
+    // Envia a resposta com o status e mensagem adequados
     response.status(status).json({
       statusCode: status,
       message,

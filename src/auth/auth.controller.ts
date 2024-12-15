@@ -8,13 +8,13 @@ export class AuthController {
 
   @Post()
   async login(
-    @Body() loginData: { name: string; cpf: string },
+    @Body() loginData: { email: string; cpf: string },
     @Res() res: Response,
   ) {
     try {
       console.log('Tentativa de login:', loginData)
-      const { name, cpf } = loginData
-      const result = await this.authService.login(name, cpf)
+      const { email, cpf } = loginData
+      const result = await this.authService.login(email, cpf)
       return res.json({
         message: 'Login realizado com sucesso!',
         access_token: result.access_token,

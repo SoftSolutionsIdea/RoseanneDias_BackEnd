@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { PrismaService } from 'src/prisma/prisma.service'
 import * as bcrypt from 'bcrypt'
@@ -10,25 +10,34 @@ export class AuthService {
     private readonly prisma: PrismaService,
   ) {}
 
-  async login(name: string, cpf: string) {
-    const user = await this.prisma.employee.findFirst({ where: { name } })
+  async login(email: string, cpf: string) {
+    const user = await this.prisma.employee.findUnique({
+      where: { email },
+      include: { role: true },
+    })
+    // Se o usuário não for encontrado, lançar UnauthorizedException
     if (!user) {
-      throw new HttpException(
-        'O usuário não foi encontrado!',
-        HttpStatus.NOT_FOUND,
-      )
+      throw new UnauthorizedException('O usuário não foi encontrado!')
     }
     if (user.cpf === cpf) {
-      const payload = { name: user.name, id: user.id }
+      const payload = {
+        email: user.email,
+        id: user.id,
+        role: user.role.role,
+      }
       const token = this.jwtService.sign(payload)
       return { access_token: token }
     }
     const isValidCpf = await bcrypt.compare(cpf, user.cpf)
     if (!isValidCpf) {
-      throw new HttpException('Senha incorreta', HttpStatus.UNAUTHORIZED)
+      throw new UnauthorizedException('Credenciais inválidas')
     }
 
-    const payload = { name: user.name, id: user.id }
+    const payload = {
+      email: user.email,
+      id: user.id,
+      role: user.role.role,
+    }
     const token = this.jwtService.sign(payload)
 
     return { access_token: token }

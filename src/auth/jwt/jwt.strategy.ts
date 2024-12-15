@@ -16,12 +16,15 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: JwtPayload) {
     const user = await this.prisma.employee.findFirst({
-      where: { name: payload.name },
+      where: { id: payload.id }, // Assumindo que o ID é único
+      include: { role: true },
     })
-    console.log('Usuário encontrado', user)
+
     if (!user) {
-      throw new Error('O usuário não foi encontrado')
+      console.log('Usuário não encontrado')
+      throw new Error('Usuário não encontrado')
     }
-    return user
+
+    return { id: user.id, name: user.email, role: user.role.role } // Inclui o role
   }
 }
