@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { Module, OnModuleInit } from '@nestjs/common'
 import { EmployeeModule } from './employee/employee.module'
 import { EmployeeService } from './employee/employee.service'
 import { PrismaService } from './prisma/prisma.service'
@@ -10,10 +10,18 @@ import { ClientController } from './cliente/cliente.controller'
 import { ProductsService } from './products/products.service'
 import { ClientService } from './cliente/cliente.service'
 import { AuthModule } from './auth/auth.module'
+import { PdfService } from './pdf/pdf.service'
+import { pdfController } from './pdf/pdf.controller'
+import { execSync } from 'child_process'
 
 @Module({
   imports: [EmployeeModule, ProductsModule, ClienteModule, AuthModule],
-  controllers: [EmployeeController, ProductsController, ClientController],
-  providers: [EmployeeService, PrismaService, ProductsService, ClientService],
+  controllers: [EmployeeController, ProductsController, ClientController, pdfController],
+  providers: [EmployeeService, PrismaService, ProductsService, ClientService, PdfService],
 })
-export class AppModule {}
+export class AppModule implements OnModuleInit {
+  onModuleInit() {
+    console.log('Copying templates...');
+    execSync('npm run copy-templates')
+  }
+}
