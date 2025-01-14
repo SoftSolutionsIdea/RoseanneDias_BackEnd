@@ -271,4 +271,34 @@ export class ClientService {
 
     return addressCli
   }
+
+  async toggleClienteStatus(id: string): Promise<{ message: string; cliente: any }> {
+    const cliente = await this.prisma.client.findUnique({
+      where: { id },
+    });
+
+    if (!cliente) {
+      throw new NotFoundException('Cliente não encontrado');
+    }
+
+    const novoStatus = !cliente.isActive;
+
+    const clienteAtualizado = await this.prisma.client.update({
+      where: { id },
+      data: { isActive: novoStatus },
+    });
+
+    const message = novoStatus ? 'Cliente ativado com sucesso' : 'Cliente desativado com sucesso';
+
+    return { message, cliente: clienteAtualizado };
+  }
+
+  async getClientesAtivos(): Promise<any[]> {
+    return await this.prisma.client.findMany({
+      where: { isActive: true },
+    });
+  }
+
 }
+
+
