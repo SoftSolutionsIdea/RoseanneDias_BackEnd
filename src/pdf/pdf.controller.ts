@@ -6,23 +6,41 @@ import { PdfService } from './pdf.service';
 export class pdfController {
   constructor(private readonly pdfService: PdfService) {}
 
-  @Get(':id')
-  async getRentalPdf(@Param('id') rentalId: string, @Res() res: Response) {
+  @Get('product/:id')
+  async getProductPdf(@Param('id') productId: string, @Res() res: Response) {
     try {
-      // Gera o PDF a partir do aluguel
-      const pdfData = await this.pdfService.generateRentalPdf(rentalId);
-
-      // Configura o cabeçalho para que o navegador faça o download do arquivo PDF
+      const pdfData = await this.pdfService.generateProductPdf(productId);
       res.set({
-        'Content-Type': 'application/pdf', // Define o tipo do conteúdo
-        'Content-Disposition': `attachment; filename=aluguel-${rentalId}.pdf`, // Define o nome do arquivo para download
+        'Content-Type': 'application/pdf', 
+        'Content-Disposition': `attachment; filename=aluguel-${productId}.pdf`, 
       });
 
-      // Envia os dados binários do PDF como resposta
       res.send(pdfData);
     } catch (error) {
-      // Em caso de erro, envia a mensagem de erro
       res.status(500).send({ error: error.message });
     }
   }
+  @Get('product')
+async getAllProductPdf(@Res() res: Response) {
+  try {
+    const pdfData = await this.pdfService.generateAllProductPdf();
+
+    if (pdfData.length === 0) {
+      throw new Error('O PDF gerado está vazio.');
+    }
+
+    const fileName = `relatorio_produtos_${new Date().toISOString().split('T')[0]}.pdf`;
+
+    res.set({
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `attachment; filename=${fileName}`,
+    });
+
+    res.send(pdfData); 
+  } catch (error) {
+    console.error('Erro ao gerar PDF:', error.message);
+    res.status(500).send({ error: error.message });
+  }
+}
+
 }

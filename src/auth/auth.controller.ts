@@ -20,8 +20,8 @@ export class AuthController {
         access_token: result.access_token,
       })
     } catch (error) {
-      console.error('Erro no login:', error.message)
-      return res.status(500).json({ error: error.message })
+      console.error('', error.message)
+      return res.status(401).json({ error: error.message })
     }
   }
 }
