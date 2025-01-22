@@ -18,8 +18,14 @@ export class ClientController {
   async update(
     @Param('id') id: string,
     @Body() updateClientDto: UpdateClientDto,
+    @Res() res: Response
   ) {
-    return await this.clientService.updateCliente(id, updateClientDto)
+
+    return res.json
+    ({
+      message: 'Cliente atualizado com sucesso',
+      Cliente: await this.clientService.updateCliente(id, updateClientDto)
+    })
   }
 
   @Get()
@@ -28,8 +34,14 @@ export class ClientController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string) {
-    return await this.clientService.deleteClient(id)
+  async delete(
+  @Param('id') id: string,
+  @Res() res: Response) {
+    return res.json
+    ({
+      message: 'Cliente deletado com sucesso',
+      cliente: await this.clientService.deleteClient(id)
+    }) 
   }
 
   @Get('address')

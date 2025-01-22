@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer'
-import { IsNotEmpty, IsString, ValidateNested } from 'class-validator'
+import { IsNotEmpty, IsNumber, IsString, ValidateNested } from 'class-validator'
 import { createCategoryDto } from './createCategory.dto'
 import { createColorDto } from './createColor.dto'
 import { createImageDto } from './createImage.dto'
@@ -24,7 +24,7 @@ export class updateProductsDto {
   @IsNotEmpty()
   description?: string
 
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
   amount?: number
 

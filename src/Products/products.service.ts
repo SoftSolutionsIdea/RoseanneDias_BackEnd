@@ -68,33 +68,33 @@ export class ProductsService {
   async updateProducts(id: string, data: updateProductsDto) {
     const rental = await createOrUpdate(
       this.prisma.rental,
-      { amount: data.rental.rental },
-      { amount: data.rental.rental },
+      { rental: data.rental.rental },
+      { rental: data.rental.rental },
     )
     const category = await createOrUpdate(
       this.prisma.category,
-      { time: data.category.category },
-      { time: data.category.category },
+      { category: data.category.category },
+      { category: data.category.category },
     )
     const color = await createOrUpdate(
       this.prisma.color,
-      { role: data.color.color },
-      { role: data.color.color },
+      { color: data.color.color },
+      { color: data.color.color },
     )
     const image = await createOrUpdate(
       this.prisma.image,
-      { cep: data.image.image },
-      { cep: data.image.image },
+      { image: data.image.image },
+      { image: data.image.image },
     )
     const spentValue = await createOrUpdate(
       this.prisma.spentValue,
-      { street: data.spentValue.spentValue },
-      { street: data.spentValue.spentValue },
+      { spentValue: data.spentValue.spentValue },
+      { spentValue: data.spentValue.spentValue },
     )
     const status = await createOrUpdate(
       this.prisma.status,
-      { city: data.status.status },
-      { city: data.status.status },
+      { status: data.status.status },
+      { status: data.status.status },
     )
 
     return this.prisma.products.update({
@@ -103,8 +103,8 @@ export class ProductsService {
         name: data.name,
         code: data.code,
         size: data.size,
-        description: data.description,
         amount: data.amount,
+        description: data.description,
         rentalId: rental.id,
         categoryId: category.id,
         colorId: color.id,

@@ -196,7 +196,7 @@ export class ClientService {
     })
 
     if (!client) {
-      throw new NotFoundException('Funcionário não encontrado')
+      throw new NotFoundException('Cliente não encontrado')
     }
 
     await this.prisma.client.delete({
