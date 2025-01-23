@@ -10,8 +10,8 @@ export class AuthService {
     private readonly prisma: PrismaService,
   ) {}
 
-  async login(name: string, cpf: string) {
-    const user = await this.prisma.employee.findFirst({ where: { name } })
+  async login(email: string, cpf: string) {
+    const user = await this.prisma.employee.findFirst({ where: { email } })
     if (!user) {
       throw new HttpException(
         'O usuário não foi encontrado!',
@@ -19,18 +19,24 @@ export class AuthService {
       )
     }
     if (user.cpf === cpf) {
-      const payload = { name: user.name, id: user.id }
+      const payload = { email: user.email, id: user.id }
       const token = this.jwtService.sign(payload)
-      return { access_token: token }
+      return { 
+        access_token: token,
+        name: user.name
+       }
     }
     const isValidCpf = await bcrypt.compare(cpf, user.cpf)
     if (!isValidCpf) {
       throw new HttpException('Senha incorreta', HttpStatus.UNAUTHORIZED)
     }
 
-    const payload = { name: user.name, id: user.id }
+    const payload = { email: user.email, id: user.id }
     const token = this.jwtService.sign(payload)
 
-    return { access_token: token }
+    return { 
+      access_token: token,
+      name: user.name
+     }
   }
 }
