@@ -190,9 +190,9 @@ model Measurements {
   Products        Products @relation(fields: [productId], references: [id])
   ombro           Float?
   busto           Float?
-  corOmbroCintura Float?
-  corOmbroCos     Float?
-  corpoTQC        Float?
+  coOmbroCintura Float?
+  coOmbroCos     Float?
+  coCorpoTQC        Float?
   cintura         Float?
   cos             Float?
   quadril         Float?
