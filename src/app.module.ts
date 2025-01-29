@@ -16,12 +16,23 @@ import { execSync } from 'child_process'
 
 @Module({
   imports: [EmployeeModule, ProductsModule, ClienteModule, AuthModule],
-  controllers: [EmployeeController, ProductsController, ClientController, pdfController],
-  providers: [EmployeeService, PrismaService, ProductsService, ClientService, PdfService],
+  controllers: [
+    EmployeeController,
+    ProductsController,
+    ClientController,
+    pdfController,
+  ],
+  providers: [
+    EmployeeService,
+    PrismaService,
+    ProductsService,
+    ClientService,
+    PdfService,
+  ],
 })
 export class AppModule implements OnModuleInit {
   onModuleInit() {
-    console.log('Copying templates...');
+    console.log('Copying templates...')
     execSync('npm run copy-templates')
   }
 }

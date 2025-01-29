@@ -21,10 +21,10 @@ export class AuthService {
     if (user.cpf === cpf) {
       const payload = { email: user.email, id: user.id }
       const token = this.jwtService.sign(payload)
-      return { 
+      return {
         access_token: token,
-        name: user.name
-       }
+        name: user.name,
+      }
     }
     const isValidCpf = await bcrypt.compare(cpf, user.cpf)
     if (!isValidCpf) {
@@ -34,9 +34,9 @@ export class AuthService {
     const payload = { email: user.email, id: user.id }
     const token = this.jwtService.sign(payload)
 
-    return { 
+    return {
       access_token: token,
-      name: user.name
-     }
+      name: user.name,
+    }
   }
 }

@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Res } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Res,
+} from '@nestjs/common'
 import { ProductsService } from './products.service'
 import { CreateProductsDto } from './dto/createProducts.dto'
 import { updateProductsDto } from './dto/updateProducts.dto'
@@ -11,10 +20,11 @@ export class ProductsController {
   @Post('register')
   async create(
     @Body() createProductsDto: CreateProductsDto,
-    @Res() res: Response) {
-    return res.json ({
-      message: "Produto cadastrado com sucesso!",
-      Produto: await this.productsService.createProducts(createProductsDto)
+    @Res() res: Response,
+  ) {
+    return res.json({
+      message: 'Produto cadastrado com sucesso!',
+      Produto: await this.productsService.createProducts(createProductsDto),
     })
   }
 
@@ -22,10 +32,11 @@ export class ProductsController {
   async update(
     @Param('id') id: string,
     @Body() updateProductsDto: updateProductsDto,
-    @Res() res: Response) {
-    return res.json ({
-      message: "Produto atualizado com sucesso!",
-      Produto: await this.productsService.updateProducts(id, updateProductsDto)
+    @Res() res: Response,
+  ) {
+    return res.json({
+      message: 'Produto atualizado com sucesso!',
+      Produto: await this.productsService.updateProducts(id, updateProductsDto),
     })
   }
 
@@ -35,12 +46,10 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  async deleteProduct(
-    @Param('id') id: string,
-    @Res() res: Response) {
-    return res.json ({
-      message: "Produto deletado com sucesso!",
-      Produto: await this.productsService.deleteProduct(id)
+  async deleteProduct(@Param('id') id: string, @Res() res: Response) {
+    return res.json({
+      message: 'Produto deletado com sucesso!',
+      Produto: await this.productsService.deleteProduct(id),
     })
   }
 }

@@ -1,9 +1,19 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, Patch, Res, HttpStatus } from '@nestjs/common'
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Put,
+  Delete,
+  Patch,
+  Res,
+  HttpStatus,
+} from '@nestjs/common'
 import { ClientService } from './cliente.service'
 import { CreateClientDto } from './dto/createClient.dto'
 import { UpdateClientDto } from './dto/updateCliente.dto'
-import { Response } from 'express';
-
+import { Response } from 'express'
 
 @Controller('client')
 export class ClientController {
@@ -18,13 +28,11 @@ export class ClientController {
   async update(
     @Param('id') id: string,
     @Body() updateClientDto: UpdateClientDto,
-    @Res() res: Response
+    @Res() res: Response,
   ) {
-
-    return res.json
-    ({
+    return res.json({
       message: 'Cliente atualizado com sucesso',
-      Cliente: await this.clientService.updateCliente(id, updateClientDto)
+      Cliente: await this.clientService.updateCliente(id, updateClientDto),
     })
   }
 
@@ -34,14 +42,11 @@ export class ClientController {
   }
 
   @Delete(':id')
-  async delete(
-  @Param('id') id: string,
-  @Res() res: Response) {
-    return res.json
-    ({
+  async delete(@Param('id') id: string, @Res() res: Response) {
+    return res.json({
       message: 'Cliente deletado com sucesso',
-      cliente: await this.clientService.deleteClient(id)
-    }) 
+      cliente: await this.clientService.deleteClient(id),
+    })
   }
 
   @Get('address')
@@ -57,21 +62,23 @@ export class ClientController {
   @Patch(':id/toggle')
   async toggleClienteStatus(@Param('id') id: string, @Res() res: Response) {
     try {
-      const { message, cliente } = await this.clientService.toggleClienteStatus(id);
-      return res.status(200).send({ message, cliente });
+      const { message, cliente } =
+        await this.clientService.toggleClienteStatus(id)
+      return res.status(200).send({ message, cliente })
     } catch (error) {
-      return res.status(error.status || 500).send({ error: error.message });
+      return res.status(error.status || 500).send({ error: error.message })
     }
   }
 
   @Get('ativos')
   async getClientesAtivos(@Res() res: Response) {
     try {
-      const clientes = await this.clientService.getClientesAtivos();
-      return res.status(HttpStatus.OK).send(clientes);
+      const clientes = await this.clientService.getClientesAtivos()
+      return res.status(HttpStatus.OK).send(clientes)
     } catch (error) {
-      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send({ error: error.message })
     }
   }
-
 }

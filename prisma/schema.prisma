@@ -137,7 +137,8 @@ model Products {
   image      Image      @relation(fields: [imageId], references: [id])
   spentValue SpentValue @relation(fields: [spentValueId], references: [id])
   status     Status     @relation(fields: [statusId], references: [id])
-
+  measurements Measurements?
+  
   @@map("products")
 }
 
@@ -181,6 +182,31 @@ model Status {
   status String @unique
 
   products Products[]
+}
+
+model Measurements {
+  id              Int      @id @default(autoincrement())
+  productId       String   @unique
+  Products        Products @relation(fields: [productId], references: [id])
+  ombro           Float?
+  busto           Float?
+  corOmbroCintura Float?
+  corOmbroCos     Float?
+  corpoTQC        Float?
+  cintura         Float?
+  cos             Float?
+  quadril         Float?
+  SaiaCurta       Float?
+  SaiaLonga       Float?
+  Short           Float?
+  Calca           Float?
+  Vestido         Float?
+  Manga           Float?
+  punho           Float?
+  medidaFrente    Float?
+  OmbroAOmbro     Float?
+
+  @@map("measurements")
 }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-CLIENTS-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
