@@ -32,7 +32,6 @@ import { execSync } from 'child_process'
 })
 export class AppModule implements OnModuleInit {
   onModuleInit() {
-    console.log('Copying templates...')
     execSync('npm run copy-templates')
   }
 }

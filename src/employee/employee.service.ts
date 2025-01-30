@@ -75,10 +75,6 @@ export class EmployeeService {
         },
       })
     }
-    console.log('Creating or updating wage:', data.wage)
-    console.log('Creating or updating time:', data.time)
-    console.log('Creating or updating role:', data.role)
-    console.log('Creating or updating address:', data.address)
 
     return this.prisma.employee.create({
       data: {
