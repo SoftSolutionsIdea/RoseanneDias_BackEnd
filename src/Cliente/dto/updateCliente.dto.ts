@@ -11,10 +11,11 @@ import {
 } from 'class-validator'
 import { IsCPFOrCNPJ } from 'src/common/dto/cpf_cnpj'
 import { CreateAddressDto } from 'src/common/dto/address/createAddress.dto'
+import { CreateMeasurementsDto } from './createMeasurementsDto'
 
 export class UpdateClientDto {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   name?: string
 
   @IsEmail({}, { message: 'Email inválido' })
@@ -28,6 +29,7 @@ export class UpdateClientDto {
   instagram?: string
 
   @IsString()
+  @IsOptional()
   @Matches(/^\(\d{2}\) \d{4,5}-\d{4}$/, {
     message:
       'Número de telefone deve estar no formato (XX) XXXX-XXXX OU (XX) XXXXX-XXXX',
@@ -35,11 +37,15 @@ export class UpdateClientDto {
   telephone_1?: string
 
   @IsString()
-  @IsPhoneNumber()
+  @Matches(/^\(\d{2}\) \d{4,5}-\d{4}$/, {
+    message:
+      'Número de telefone deve estar no formato (XX) XXXX-XXXX OU (XX) XXXXX-XXXX',
+  })
   @IsOptional()
   telephone_2?: string
 
   @IsDateString({}, { message: 'Formato inválido da data' })
+  @IsOptional()
   niver?: string
 
   @IsString()
@@ -49,10 +55,19 @@ export class UpdateClientDto {
   rg?: string
 
   @IsCPFOrCNPJ({ message: 'CPF ou CNPJ inválido!' })
+  @Matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
+    message: 'cpf precisa ser do formato XXX.XXX.XXX-XX',
+  })
+  @IsOptional()
   cpf_cnpj?: string
 
   @ValidateNested()
-  @IsNotEmpty()
+  @IsOptional()
   @Type(() => CreateAddressDto)
   addressCli?: CreateAddressDto
+
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => CreateMeasurementsDto)
+  measurements?: CreateMeasurementsDto
 }

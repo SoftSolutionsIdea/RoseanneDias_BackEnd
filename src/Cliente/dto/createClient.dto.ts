@@ -10,6 +10,7 @@ import {
 } from 'class-validator'
 import { IsCPFOrCNPJ } from 'src/common/dto/cpf_cnpj'
 import { CreateAddressDto } from 'src/common/dto/address/createAddress.dto'
+import { CreateMeasurementsDto } from './createMeasurementsDto'
 
 export class CreateClientDto {
   @IsString()
@@ -51,10 +52,18 @@ export class CreateClientDto {
   rg: string
 
   @IsCPFOrCNPJ({ message: 'CPF ou CNPJ inválido!' })
+  @Matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
+    message: 'cpf precisa ser do formato XXX.XXX.XXX-XX',
+  })
   cpf_cnpj: string
 
   @ValidateNested()
   @IsNotEmpty()
   @Type(() => CreateAddressDto)
   addressCli: CreateAddressDto
+
+  @ValidateNested()
+  @IsOptional()
+  @Type(() => CreateMeasurementsDto)
+  measurements?: CreateMeasurementsDto
 }

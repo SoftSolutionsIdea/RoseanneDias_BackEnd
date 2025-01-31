@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import { createOrUpdate } from '../common/helpers/createOrUpdate'
 import { CreateClientDto } from './dto/createClient.dto'
 import { UpdateClientDto } from './dto/updateCliente.dto'
+import { CreateMeasurementsDto } from './dto/createMeasurementsDto'
 
 @Injectable()
 export class ClientService {
@@ -73,8 +74,30 @@ export class ClientService {
           telephone_2: data.telephone_2,
           niver: data.niver,
           addressCliId: address.id,
+          measurements: data.measurements? {
+            create: {
+              ombro: data.measurements.ombro,
+              busto: data.measurements.busto,
+              coOmbroCintura: data.measurements.coOmbroCintura,
+              coOmbroCos: data.measurements.coOmbroCos,
+              coCorpoTQC: data.measurements.coCorpoTQC,
+              cintura: data.measurements.cintura,
+              cos: data.measurements.cos,
+              quadril: data.measurements.quadril,
+              SaiaCurta: data.measurements.SaiaCurta,
+              SaiaLonga: data.measurements.SaiaLonga,
+              Short: data.measurements.Short,
+              Calca: data.measurements.Calca,
+              Vestido: data.measurements.Vestido,
+              Manga: data.measurements.Manga,
+              punho: data.measurements.punho,
+              Frente: data.measurements.Frente,
+              OmbroAOmbro: data.measurements.OmbroAOmbro,
+            },
+          }: undefined
         },
         include: {
+          measurements: true,
           addressCli: {
             include: {
               bairroCli: true,
@@ -162,6 +185,58 @@ export class ClientService {
       }
     }
 
+    const existingMeasurement = await this.prisma.measurements.findUnique({
+      where: { clientId: id },
+    });
+  
+    if (existingMeasurement) {
+      await this.prisma.measurements.update({
+        where: { clientId: id },
+        data: {
+          ombro: data.measurements?.ombro ?? existingMeasurement.ombro,
+          busto: data.measurements?.busto ?? existingMeasurement.busto,
+          coOmbroCintura: data.measurements.coOmbroCintura ?? existingMeasurement.coOmbroCintura,
+          coOmbroCos: data.measurements.coOmbroCos ?? existingMeasurement.coOmbroCos,
+          cintura: data.measurements?.cintura ?? existingMeasurement.cintura,
+          cos: data.measurements.cos ?? existingMeasurement.cos,
+          quadril: data.measurements.quadril ?? existingMeasurement.quadril,
+          SaiaCurta: data.measurements.SaiaCurta ?? existingMeasurement.SaiaCurta,
+          SaiaLonga: data.measurements.SaiaLonga ?? existingMeasurement.SaiaLonga,
+          Short: data.measurements.Short ?? existingMeasurement.Short,
+          Calca: data.measurements.Calca ?? existingMeasurement.Calca,
+          Vestido: data.measurements.Vestido  ?? existingMeasurement.Vestido,
+          Manga: data.measurements.Manga ?? existingMeasurement.Manga,
+          punho: data.measurements.punho  ?? existingMeasurement.punho,
+          Frente: data.measurements.Frente  ?? existingMeasurement.Frente,
+          OmbroAOmbro: data.measurements.OmbroAOmbro  ?? existingMeasurement.ombro,
+        },
+      });
+
+    } else if (data.measurements) {
+      await this.prisma.measurements.create({
+        data: {
+          clientId: id,
+          ombro: data.measurements.ombro,
+          busto: data.measurements.busto,
+          coOmbroCintura: data.measurements.coOmbroCintura,
+          coOmbroCos: data.measurements.coOmbroCos,
+          coCorpoTQC: data.measurements.coCorpoTQC,
+          cintura: data.measurements.cintura,
+          cos: data.measurements.cos,
+          quadril: data.measurements.quadril,
+          SaiaCurta: data.measurements.SaiaCurta,
+          SaiaLonga: data.measurements.SaiaLonga,
+          Short: data.measurements.Short,
+          Calca: data.measurements.Calca,
+          Vestido: data.measurements.Vestido,
+          Manga: data.measurements.Manga,
+          punho: data.measurements.punho,
+          Frente: data.measurements.Frente,
+          OmbroAOmbro: data.measurements.OmbroAOmbro,
+    },
+      });
+    }
+
     return this.prisma.client.update({
       where: { id },
       data: {
@@ -176,6 +251,7 @@ export class ClientService {
         addressCliId: address.id,
       },
       include: {
+        measurements: true,
         addressCli: {
           include: {
             bairroCli: true,
@@ -192,7 +268,10 @@ export class ClientService {
   async deleteClient(id: string) {
     const client = await this.prisma.client.findUnique({
       where: { id },
-      include: { addressCli: true },
+      include: { 
+        addressCli: true,
+        measurements: true
+       },
     })
 
     if (!client) {
@@ -222,6 +301,7 @@ export class ClientService {
   async findAllClient() {
     return this.prisma.client.findMany({
       include: {
+        measurements: true,
         addressCli: {
           include: {
             cepCli: true,

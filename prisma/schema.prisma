@@ -137,7 +137,7 @@ model Products {
   image      Image      @relation(fields: [imageId], references: [id])
   spentValue SpentValue @relation(fields: [spentValueId], references: [id])
   status     Status     @relation(fields: [statusId], references: [id])
-  measurements Measurements?
+  
   
   @@map("products")
 }
@@ -184,31 +184,6 @@ model Status {
   products Products[]
 }
 
-model Measurements {
-  id              Int      @id @default(autoincrement())
-  productId       String   @unique
-  Products        Products @relation(fields: [productId], references: [id])
-  ombro           Float?
-  busto           Float?
-  coOmbroCintura Float?
-  coOmbroCos     Float?
-  coCorpoTQC        Float?
-  cintura         Float?
-  cos             Float?
-  quadril         Float?
-  SaiaCurta       Float?
-  SaiaLonga       Float?
-  Short           Float?
-  Calca           Float?
-  Vestido         Float?
-  Manga           Float?
-  punho           Float?
-  medidaFrente    Float?
-  OmbroAOmbro     Float?
-
-  @@map("measurements")
-}
-
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-CLIENTS-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 model client {
@@ -228,6 +203,7 @@ model client {
   updatedAt    DateTime @updatedAt
 
   addressCli AddressCli @relation(fields: [addressCliId], references: [id])
+  measurements Measurements?
   // contracts      Contracts  @relation(fields: [contractsId], references: [id])
 
   @@map("client")
@@ -248,7 +224,7 @@ model AddressCli {
   bairroCli BairroCli @relation(fields: [bairroCliId], references: [id])
   stateCli  StateCli  @relation(fields: [stateCliId], references: [id])
   cityCli   CityCli   @relation(fields: [cityCliId], references: [id])
-
+  
   client client[]
 
   @@map("addressCli")
@@ -287,6 +263,31 @@ model CityCli {
   city String @unique
 
   AddressCli AddressCli[]
+}
+
+model Measurements {
+  id             Int      @id @default(autoincrement())
+  clientId       String   @unique
+  client         client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  ombro          Float?
+  busto          Float?
+  coOmbroCintura Float?
+  coOmbroCos     Float?
+  coCorpoTQC     Float?
+  cintura        Float?
+  cos            Float?
+  quadril        Float?
+  SaiaCurta      Float?
+  SaiaLonga      Float?
+  Short          Float?
+  Calca          Float?
+  Vestido        Float?
+  Manga          Float?
+  punho          Float?
+  Frente         Float?
+  OmbroAOmbro    Float?
+
+  @@map("measurements")
 }
 
 // model Contracts {
