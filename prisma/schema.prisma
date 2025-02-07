@@ -137,7 +137,7 @@ model Products {
   image      Image      @relation(fields: [imageId], references: [id])
   spentValue SpentValue @relation(fields: [spentValueId], references: [id])
   status     Status     @relation(fields: [statusId], references: [id])
-  
+  contracts Contract[]
   
   @@map("products")
 }
@@ -186,7 +186,7 @@ model Status {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-CLIENTS-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
-model client {
+model Client {
   id           String   @id @unique @default(uuid())
   name         String
   email        String   @unique
@@ -197,14 +197,13 @@ model client {
   rg           String   @unique
   cpf_cnpj     String   @unique
   addressCliId Int
-  // contractsId  Int
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   addressCli AddressCli @relation(fields: [addressCliId], references: [id])
   measurements Measurements?
-  // contracts      Contracts  @relation(fields: [contractsId], references: [id])
+  contracts Contract[]
 
   @@map("client")
 }
@@ -225,7 +224,7 @@ model AddressCli {
   stateCli  StateCli  @relation(fields: [stateCliId], references: [id])
   cityCli   CityCli   @relation(fields: [cityCliId], references: [id])
   
-  client client[]
+  client Client[]
 
   @@map("addressCli")
 }
@@ -268,7 +267,7 @@ model CityCli {
 model Measurements {
   id             Int      @id @default(autoincrement())
   clientId       String   @unique
-  client         client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  client         Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
   ombro          Float?
   busto          Float?
   coOmbroCintura Float?
@@ -290,6 +289,33 @@ model Measurements {
   @@map("measurements")
 }
 
-// model Contracts {
-//   id Int @id @default(autoincrement())
-// }
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-CONTRACTS-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+enum UserStatus {
+  Pending
+  Completed
+  Canceled
+}
+
+model Contract {
+  id        Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  endDate   DateTime?
+  
+  clientId  String
+  client    Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  productId String
+  products  Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  statusId  Int
+  contractStatus ContractStatus @relation(fields: [statusId], references: [id], onDelete: Cascade)
+
+}
+
+model ContractStatus {
+  id Int @id @default(autoincrement())
+  status UserStatus @unique
+
+  contracts Contract[]
+}

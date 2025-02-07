@@ -13,14 +13,23 @@ import { AuthModule } from './auth/auth.module'
 import { PdfService } from './pdf/pdf.service'
 import { pdfController } from './pdf/pdf.controller'
 import { execSync } from 'child_process'
+import { ContractsModule } from './contracts/contracts.module';
+import { ContractsController } from './contracts/contracts.controller'
+import { ContractsService } from './contracts/contracts.service'
 
 @Module({
-  imports: [EmployeeModule, ProductsModule, ClienteModule, AuthModule],
+  imports: [
+    EmployeeModule,
+    ProductsModule,
+    ClienteModule,
+    AuthModule,
+    ContractsModule],
   controllers: [
     EmployeeController,
     ProductsController,
     ClientController,
     pdfController,
+    ContractsController,
   ],
   providers: [
     EmployeeService,
@@ -28,6 +37,7 @@ import { execSync } from 'child_process'
     ProductsService,
     ClientService,
     PdfService,
+    ContractsService,
   ],
 })
 export class AppModule implements OnModuleInit {
