@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Post, Body, Patch } from '@nestjs/common';
 import { ContractsService } from './contracts.service';
 import { UserStatus } from '@prisma/client';
-import { CreateContractDto } from './createContracts.dto';
+import { CreateContractDto } from './Dto/createContracts.dto';
 
 @Controller('contracts')
 export class ContractsController {
@@ -12,10 +12,36 @@ export class ContractsController {
     return await this.contractsService.getContractsByStatus(status);
   }
 
+
   @Post('create')
   async createContract(@Body() createContractDto: CreateContractDto) {
-    const { clientId, productId, status } = createContractDto;
-    return await this.contractsService.createContract(clientId, productId, status || 'Pending');
+    const {
+      clientId,
+      eventDate,
+      seller,
+      occasion,
+      eventLocation,
+      eventName,
+      observations,
+      discountPercentage,
+      status,
+      products,
+      payments,
+    } = createContractDto;
+
+    return await this.contractsService.createContract({
+      clientId,
+      eventDate,
+      seller,
+      occasion,
+      eventLocation,
+      eventName,
+      observations,
+      discountPercentage,
+      status: status || 'Pending',
+      products,
+      payments,
+    });
   }
 
   @Patch(':contractId/status')

@@ -137,7 +137,7 @@ model Products {
   image      Image      @relation(fields: [imageId], references: [id])
   spentValue SpentValue @relation(fields: [spentValueId], references: [id])
   status     Status     @relation(fields: [statusId], references: [id])
-  contracts Contract[]
+  contractProducts ContractProduct[]
   
   @@map("products")
 }
@@ -298,20 +298,59 @@ enum UserStatus {
 }
 
 model Contract {
-  id        Int @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  endDate   DateTime?
+  id                 Int @id @default(autoincrement())
+  contractDate       DateTime       @default(now())
+  eventDate          DateTime //
+  seller             String //
+  occasion           String //
+  eventLocation      String //
+  eventName          String //
+  observations       String?
+  discountPercentage Float?
+  createdAt          DateTime @default(now())
+  endDate            DateTime?
   
-  clientId  String
-  client    Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  clientId           String
+  client             Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
-  productId String
-  products  Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+  statusId           Int
+  contractStatus     ContractStatus @relation(fields: [statusId], references: [id], onDelete: Cascade)
 
-  statusId  Int
-  contractStatus ContractStatus @relation(fields: [statusId], references: [id], onDelete: Cascade)
-
+  products           ContractProduct[]
+  payment            ContractPayment[]
 }
+
+model ContractProduct {
+  id              Int @id @default(autoincrement())
+  productId       String
+  testDate        DateTime
+  time            String
+  provaOk         Boolean //
+  withdrawalDate  DateTime
+  returnDate      DateTime
+  withdrawnDay    DateTime
+  returnedDay     DateTime
+
+  contractId      Int
+  contract        Contract @relation(fields: [contractId], references: [id])
+
+  products        Products @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model ContractPayment {
+  id              Int @id @default(autoincrement())
+  paymentMethod   String //
+  paymentDate     DateTime
+  flag            String? //
+  paymentAmount   Float  //
+  contractId      Int
+  contract        Contract @relation(fields: [contractId], references: [id], onDelete: Cascade)
+}
+
+
+
+
+
 
 model ContractStatus {
   id Int @id @default(autoincrement())
