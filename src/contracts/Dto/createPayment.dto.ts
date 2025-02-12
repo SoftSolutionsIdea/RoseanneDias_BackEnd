@@ -1,16 +1,16 @@
-import { IsString, IsDateString, IsOptional, IsNumber } from 'class-validator';
+import { IsString, IsDateString, IsOptional, IsNumber } from 'class-validator'
 
 export class CreateContractPaymentDto {
   @IsString()
-  paymentMethod: string;
+  paymentMethod: string
 
   @IsDateString()
-  paymentDate: string;
+  paymentDate: string
 
   @IsOptional()
   @IsString()
-  flag?: string;
+  flag?: string
 
   @IsNumber()
-  paymentAmount: number;
+  paymentAmount: number
 }

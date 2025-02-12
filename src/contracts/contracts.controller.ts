@@ -1,7 +1,7 @@
-import { Controller, Get, Param, Post, Body, Patch } from '@nestjs/common';
-import { ContractsService } from './contracts.service';
-import { UserStatus } from '@prisma/client';
-import { CreateContractDto } from './Dto/createContracts.dto';
+import { Controller, Get, Param, Post, Body, Patch } from '@nestjs/common'
+import { ContractsService } from './contracts.service'
+import { UserStatus } from '@prisma/client'
+import { CreateContractDto } from './Dto/createContracts.dto'
 
 @Controller('contracts')
 export class ContractsController {
@@ -9,9 +9,8 @@ export class ContractsController {
 
   @Get(':status')
   async getContractsByStatus(@Param('status') status: UserStatus) {
-    return await this.contractsService.getContractsByStatus(status);
+    return await this.contractsService.getContractsByStatus(status)
   }
-
 
   @Post('create')
   async createContract(@Body() createContractDto: CreateContractDto) {
@@ -27,7 +26,7 @@ export class ContractsController {
       status,
       products,
       payments,
-    } = createContractDto;
+    } = createContractDto
 
     return await this.contractsService.createContract({
       clientId,
@@ -41,7 +40,7 @@ export class ContractsController {
       status: status || 'Pending',
       products,
       payments,
-    });
+    })
   }
 
   @Patch(':contractId/status')
@@ -49,6 +48,9 @@ export class ContractsController {
     @Param('contractId') contractId: number,
     @Body() body: { newStatus: UserStatus },
   ) {
-    return await this.contractsService.updateContractStatus(contractId, body.newStatus);
+    return await this.contractsService.updateContractStatus(
+      contractId,
+      body.newStatus,
+    )
   }
 }

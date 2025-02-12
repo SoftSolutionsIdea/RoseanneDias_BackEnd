@@ -1,7 +1,11 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
-import { Contract, UserStatus } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateContractDto } from './Dto/createContracts.dto';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common'
+import { Contract, UserStatus } from '@prisma/client'
+import { PrismaService } from 'src/prisma/prisma.service'
+import { CreateContractDto } from './Dto/createContracts.dto'
 
 @Injectable()
 export class ContractsService {
@@ -10,10 +14,10 @@ export class ContractsService {
   async getContractsByStatus(status: UserStatus): Promise<Contract[]> {
     const contractStatus = await this.prisma.contractStatus.findUnique({
       where: { status },
-    });
+    })
 
     if (!contractStatus) {
-      throw new NotFoundException(`Status ${status} não encontrado.`);
+      throw new NotFoundException(`Status ${status} não encontrado.`)
     }
 
     return this.prisma.contract.findMany({
@@ -28,7 +32,7 @@ export class ContractsService {
         payment: true,
         contractStatus: true,
       },
-    });
+    })
   }
 
   async createContract(data: CreateContractDto): Promise<Contract> {
@@ -44,14 +48,16 @@ export class ContractsService {
       status,
       products,
       payments,
-    } = data;
+    } = data
 
     const contractStatus = await this.prisma.contractStatus.findUnique({
       where: { status: status || 'Pending' },
-    });
+    })
 
     if (!contractStatus) {
-      throw new BadRequestException(`Status ${status || 'Pending'} não encontrado no banco de dados.`);
+      throw new BadRequestException(
+        `Status ${status || 'Pending'} não encontrado no banco de dados.`,
+      )
     }
 
     return this.prisma.contract.create({
@@ -96,17 +102,21 @@ export class ContractsService {
         payment: true,
         contractStatus: true,
       },
-    });
+    })
   }
 
-
-  async updateContractStatus(contractId: number, newStatus: UserStatus): Promise<Contract> {
+  async updateContractStatus(
+    contractId: number,
+    newStatus: UserStatus,
+  ): Promise<Contract> {
     const contractStatus = await this.prisma.contractStatus.findUnique({
       where: { status: newStatus },
-    });
+    })
 
     if (!contractStatus) {
-      throw new NotFoundException(`Status ${newStatus} não encontrado no sistema.`);
+      throw new NotFoundException(
+        `Status ${newStatus} não encontrado no sistema.`,
+      )
     }
 
     return this.prisma.contract.update({
@@ -121,6 +131,6 @@ export class ContractsService {
         payment: true,
         contractStatus: true,
       },
-    });
+    })
   }
 }

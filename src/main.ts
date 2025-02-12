@@ -15,18 +15,21 @@ async function bootstrap() {
       transform: true,
     }),
   )
-  app.enableCors({ 
-    origin: true, 
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], 
-    allowedHeaders: ['Content-Type', 'Authorization', "ngrok-skip-browser-warning"], 
-    credentials: true 
-  });
-  
+  app.enableCors({
+    origin: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'ngrok-skip-browser-warning',
+    ],
+    credentials: true,
+  })
 
   app.use((req, res, next) => {
-    console.log(`Requisição recebida: ${req.method} ${req.url}`);
-    next();
-  });
+    console.log(`Requisição recebida: ${req.method} ${req.url}`)
+    next()
+  })
 
   const port = process.env.PORT || 3000
   app.useGlobalFilters(new ErrorsFilter())

@@ -2,9 +2,7 @@ import { Type } from 'class-transformer'
 import {
   IsDateString,
   IsEmail,
-  IsNotEmpty,
   IsOptional,
-  IsPhoneNumber,
   IsString,
   Matches,
   ValidateNested,

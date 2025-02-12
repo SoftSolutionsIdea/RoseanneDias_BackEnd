@@ -1,46 +1,55 @@
-import { IsUUID, IsDateString, IsEnum, IsOptional, IsString, IsNumber, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
-import { UserStatus } from '@prisma/client';
-import { CreateContractProductDto } from './createcontractProduct.dto';
-import { CreateContractPaymentDto } from './createPayment.dto';
-
+import {
+  IsUUID,
+  IsDateString,
+  IsEnum,
+  IsOptional,
+  IsString,
+  IsNumber,
+  ValidateNested,
+} from 'class-validator'
+import { Type } from 'class-transformer'
+import { UserStatus } from '@prisma/client'
+import { CreateContractProductDto } from './createcontractProduct.dto'
+import { CreateContractPaymentDto } from './createPayment.dto'
 
 export class CreateContractDto {
   @IsUUID()
-  clientId: string;
+  clientId: string
 
   @IsDateString()
-  eventDate: string;
+  eventDate: string
 
   @IsString()
-  seller: string;
+  seller: string
 
   @IsString()
-  occasion: string;
+  occasion: string
 
   @IsString()
-  eventLocation: string;
+  eventLocation: string
 
   @IsString()
-  eventName: string;
+  eventName: string
 
   @IsOptional()
   @IsString()
-  observations?: string;
+  observations?: string
 
   @IsOptional()
   @IsNumber()
-  discountPercentage?: number;
+  discountPercentage?: number
 
   @IsOptional()
-  @IsEnum(UserStatus, { message: 'Status deve ser Pending, Completed ou Canceled' })
-  status?: UserStatus;
+  @IsEnum(UserStatus, {
+    message: 'Status deve ser Pending, Completed ou Canceled',
+  })
+  status?: UserStatus
 
   @ValidateNested({ each: true })
   @Type(() => CreateContractProductDto)
-  products: CreateContractProductDto[];
+  products: CreateContractProductDto[]
 
   @ValidateNested({ each: true })
   @Type(() => CreateContractPaymentDto)
-  payments: CreateContractPaymentDto[];
+  payments: CreateContractPaymentDto[]
 }

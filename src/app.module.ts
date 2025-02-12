@@ -13,7 +13,7 @@ import { AuthModule } from './auth/auth.module'
 import { PdfService } from './pdf/pdf.service'
 import { pdfController } from './pdf/pdf.controller'
 import { execSync } from 'child_process'
-import { ContractsModule } from './contracts/contracts.module';
+import { ContractsModule } from './contracts/contracts.module'
 import { ContractsController } from './contracts/contracts.controller'
 import { ContractsService } from './contracts/contracts.service'
 
@@ -23,7 +23,8 @@ import { ContractsService } from './contracts/contracts.service'
     ProductsModule,
     ClienteModule,
     AuthModule,
-    ContractsModule],
+    ContractsModule,
+  ],
   controllers: [
     EmployeeController,
     ProductsController,
