@@ -9,7 +9,7 @@ import {
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { CreateRoleDto } from './createRole.dto'
-import { CreateAddressDto } from '../../common/dto/address/createAddress.dto'
+import { CreateAddressDto } from '../../../common/dto/address/createAddress.dto'
 import { CreateTimeDto } from './createTime.dto'
 import { CreateWageDto } from './createWage.dto'
 import { IsCPFOrCNPJ } from 'src/common/dto/cpf_cnpj'
