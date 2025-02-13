@@ -9,6 +9,7 @@ import {
   Patch,
   Res,
   HttpStatus,
+  Query,
 } from '@nestjs/common'
 import { ClientService } from './cliente.service'
 import { CreateClientDto } from './dto/createClient.dto'
@@ -36,29 +37,6 @@ export class ClientController {
     })
   }
 
-  @Get()
-  async findAll() {
-    return await this.clientService.findAllClient()
-  }
-
-  @Delete(':id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    return res.json({
-      message: 'Cliente deletado com sucesso',
-      cliente: await this.clientService.deleteClient(id),
-    })
-  }
-
-  @Get('address')
-  async findAllAddresses() {
-    return await this.clientService.findAllAddresses()
-  }
-
-  @Delete('address/:id')
-  async deleteAddress(@Param('id') id: string) {
-    return await this.clientService.deleteAddress(id)
-  }
-
   @Patch(':id/toggle')
   async toggleClienteStatus(@Param('id') id: string, @Res() res: Response) {
     try {
@@ -80,5 +58,36 @@ export class ClientController {
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
         .send({ error: error.message })
     }
+  }
+
+  @Get()
+  async findAll() {
+    return await this.clientService.findAllClient()
+  }
+
+    @Get('Search') 
+      async Search(@Query('q') query: string ) {
+        if (!query) return []
+        return this.clientService.SearchClients(query)
+      }
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  @Delete(':id')
+  async delete(@Param('id') id: string, @Res() res: Response) {
+    return res.json({
+      message: 'Cliente deletado com sucesso',
+      cliente: await this.clientService.deleteClient(id),
+    })
+  }
+
+  @Get('address')
+  async findAllAddresses() {
+    return await this.clientService.findAllAddresses()
+  }
+
+  @Delete('address/:id')
+  async deleteAddress(@Param('id') id: string) {
+    return await this.clientService.deleteAddress(id)
   }
 }

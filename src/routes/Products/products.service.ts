@@ -135,7 +135,25 @@ export class ProductsService {
       },
     })
   }
+  
+  async SearchProducts(query: string) {
+    return this.prisma.products.findMany({
+      where: {
+      OR: [
+        { name: { contains: query, mode: 'insensitive' } },
+        { size: { contains: query, mode: 'insensitive' } },
+        { category: {category: { contains: query, mode: 'insensitive' } }},
+        { status: {status: { contains: query, mode: 'insensitive'}}}
+      ],
+    },
+      include: {
+        category: true,
+        status: true
+      },
+    });
+  }
 
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   async deleteProduct(id: string) {
     return this.prisma.products.delete({
       where: { id },

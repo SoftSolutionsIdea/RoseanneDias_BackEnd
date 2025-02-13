@@ -3,6 +3,8 @@ import { PrismaService } from '../../prisma/prisma.service'
 import { CreateEmployeeDto } from './dto/createEmployee.dto'
 import { createOrUpdate } from '../../common/helpers/createOrUpdate'
 import { updateEmployeeDto } from './dto/updateEmployee.dto'
+import { contains } from 'class-validator'
+import { time } from 'console'
 
 @Injectable()
 export class EmployeeService {
@@ -219,6 +221,45 @@ export class EmployeeService {
     })
   }
 
+  async findAllEmployees() {
+    return this.prisma.employee.findMany({
+      include: {
+        role: true,
+        address: {
+          include: {
+            cep: true,
+            street: true,
+            city: true,
+            state: true,
+            bairro: true,
+          },
+        },
+        time: true,
+        wage: true,
+      },
+    })
+  }
+
+  async SearchEmployee(query: string) {
+    return this.prisma.employee.findMany({
+      where: {
+      OR: [
+        { name: { contains: query, mode: 'insensitive' } },
+        { telephone: { contains: query, mode: 'insensitive' } },
+        { cpf: { contains: query, mode: 'insensitive' } },
+        { time: {time: { contains: query, mode: 'insensitive'}}}
+      ],
+    },
+      include: {
+        address: true,
+        role: true,
+        time: true,
+        wage: true,
+      },
+    });
+  }
+  
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   async deleteEmployee(id: string) {
     const employee = await this.prisma.employee.findUnique({
       where: { id },
@@ -253,26 +294,7 @@ export class EmployeeService {
 
     return employee
   }
-
-  async findAllEmployees() {
-    return this.prisma.employee.findMany({
-      include: {
-        role: true,
-        address: {
-          include: {
-            cep: true,
-            street: true,
-            city: true,
-            state: true,
-            bairro: true,
-          },
-        },
-        time: true,
-        wage: true,
-      },
-    })
-  }
-
+  
   async findAllAddresses() {
     return this.prisma.address.findMany({
       include: {

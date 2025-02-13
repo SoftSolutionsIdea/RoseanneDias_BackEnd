@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   Res,
 } from '@nestjs/common'
 import { ProductsService } from './products.service'
@@ -44,6 +45,15 @@ export class ProductsController {
   async getAllProducts() {
     return this.productsService.findAllProducts()
   }
+
+  @Get('Search') 
+    async Search(@Query('q') query: string ) {
+      if (!query) return []
+      return this.productsService.SearchProducts(query)
+    }
+
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
   @Delete(':id')
   async deleteProduct(@Param('id') id: string, @Res() res: Response) {

@@ -279,6 +279,72 @@ export class ClientService {
     })
   }
 
+  async toggleClienteStatus(
+    id: string,
+  ): Promise<{ message: string; cliente: any }> {
+    const cliente = await this.prisma.client.findUnique({
+      where: { id },
+    })
+
+    if (!cliente) {
+      throw new NotFoundException('Cliente não encontrado')
+    }
+
+    const novoStatus = !cliente.isActive
+
+    const clienteAtualizado = await this.prisma.client.update({
+      where: { id },
+      data: { isActive: novoStatus },
+    })
+
+    const message = novoStatus
+      ? 'Cliente ativado com sucesso'
+      : 'Cliente desativado com sucesso'
+
+    return { message, cliente: clienteAtualizado }
+  }
+
+  async getClientesAtivos(): Promise<any[]> {
+    return await this.prisma.client.findMany({
+      where: { isActive: true },
+    })
+  }
+
+  async findAllClient() {
+    return this.prisma.client.findMany({
+      include: {
+        measurements: true,
+        addressCli: {
+          include: {
+            cepCli: true,
+            streetCli: true,
+            cityCli: true,
+            stateCli: true,
+            bairroCli: true,
+          },
+        },
+      },
+    })
+  }
+
+  async SearchClients(query: string) {
+    return this.prisma.client.findMany({
+      where: {
+      OR: [
+        { name: { contains: query, mode: 'insensitive' } },
+        { cpf_cnpj: { contains: query, mode: 'insensitive' } },
+        { rg: { contains: query, mode: 'insensitive' } },
+        { telephone_1: { contains: query, mode: 'insensitive'}},
+        { telephone_2: { contains: query, mode: 'insensitive'}},
+      ],}
+    });
+  }
+
+  
+
+
+
+// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   async deleteClient(id: string) {
     const client = await this.prisma.client.findUnique({
       where: { id },
@@ -310,36 +376,7 @@ export class ClientService {
     }
 
     return client
-  }
-
-  async findAllClient() {
-    return this.prisma.client.findMany({
-      include: {
-        measurements: true,
-        addressCli: {
-          include: {
-            cepCli: true,
-            streetCli: true,
-            cityCli: true,
-            stateCli: true,
-            bairroCli: true,
-          },
-        },
-      },
-    })
-  }
-
-  async findAllAddresses() {
-    return this.prisma.addressCli.findMany({
-      include: {
-        cepCli: true,
-        streetCli: true,
-        cityCli: true,
-        stateCli: true,
-        bairroCli: true,
-      },
-    })
-  }
+  }  
 
   async deleteAddress(id: string) {
     const numericId = parseInt(id, 10)
@@ -366,34 +403,15 @@ export class ClientService {
     return addressCli
   }
 
-  async toggleClienteStatus(
-    id: string,
-  ): Promise<{ message: string; cliente: any }> {
-    const cliente = await this.prisma.client.findUnique({
-      where: { id },
-    })
-
-    if (!cliente) {
-      throw new NotFoundException('Cliente não encontrado')
-    }
-
-    const novoStatus = !cliente.isActive
-
-    const clienteAtualizado = await this.prisma.client.update({
-      where: { id },
-      data: { isActive: novoStatus },
-    })
-
-    const message = novoStatus
-      ? 'Cliente ativado com sucesso'
-      : 'Cliente desativado com sucesso'
-
-    return { message, cliente: clienteAtualizado }
-  }
-
-  async getClientesAtivos(): Promise<any[]> {
-    return await this.prisma.client.findMany({
-      where: { isActive: true },
+  async findAllAddresses() {
+    return this.prisma.addressCli.findMany({
+      include: {
+        cepCli: true,
+        streetCli: true,
+        cityCli: true,
+        stateCli: true,
+        bairroCli: true,
+      },
     })
   }
 }

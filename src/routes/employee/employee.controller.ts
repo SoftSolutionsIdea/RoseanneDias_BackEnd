@@ -7,6 +7,7 @@ import {
   Put,
   Delete,
   Res,
+  Query,
 } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
 import { CreateEmployeeDto } from './dto/createEmployee.dto'
@@ -27,7 +28,7 @@ export class EmployeeController {
       funcionário: await this.employeeService.createEmployee(createEmployeeDto),
     })
   }
-
+  
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -42,11 +43,19 @@ export class EmployeeController {
       ),
     })
   }
-
+  
   @Get()
   async findAll() {
     return await this.employeeService.findAllEmployees()
   }
+
+  @Get('Search') 
+  async Search(@Query('q') query: string ) {
+    if (!query) return []
+    return this.employeeService.SearchEmployee(query)
+  }
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
   @Delete(':id')
   async delete(@Param('id') id: string, @Res() res: Response) {
@@ -55,7 +64,7 @@ export class EmployeeController {
       funcionário: await this.employeeService.deleteEmployee(id),
     })
   }
-
+  
   @Get('address')
   async findAllAddresses() {
     return await this.employeeService.findAllAddresses()
