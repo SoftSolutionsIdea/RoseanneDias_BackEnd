@@ -16,7 +16,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   async validate(payload: JwtPayload) {
     const user = await this.prisma.employee.findFirst({
-      where: { name: payload.name },
+      where: { 
+        name: payload.name,
+       },
     })
     console.log('Usuário encontrado', user)
     if (!user) {

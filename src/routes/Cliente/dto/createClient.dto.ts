@@ -50,7 +50,7 @@ export class CreateClientDto {
 
   @IsCPFOrCNPJ({ message: 'CPF ou CNPJ inválido!' })
   @Matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
-    message: 'cpf precisa ser do formato XXX.XXX.XXX-XX',
+    message: 'cpf ou CNPJ precisa ser válido',
   })
   cpf_cnpj: string
 

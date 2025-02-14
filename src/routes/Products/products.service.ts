@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { CreateProductsDto } from './dto/createProducts.dto'
 import { createOrUpdate } from 'src/common/helpers/createOrUpdate'
@@ -122,6 +122,39 @@ export class ProductsService {
       },
     })
   }
+
+  async toggleProudctStatus(
+    id: string,
+  ): Promise<{ message: string; product: any }> {
+    const product = await this.prisma.products.findUnique({
+      where: { id },
+    })
+
+    if (!product) {
+      throw new NotFoundException('Produto não encontrado')
+    }
+
+    const novoStatus = !product.isActive
+
+    const produtoAtualizado = await this.prisma.products.update({
+      where: { id },
+      data: { isActive: novoStatus },
+    })
+
+    const message = novoStatus
+      ? 'Produto ativado com sucesso'
+      : 'Produto desativado com sucesso'
+
+    return { message, product: produtoAtualizado }
+  }
+
+  async getProductAtivos(): Promise<any[]> {
+    return await this.prisma.products.findMany({
+      where: { isActive: true },
+    })
+  }
+
+
 
   async findAllProducts() {
     return this.prisma.products.findMany({

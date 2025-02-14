@@ -10,19 +10,24 @@ import {
   Res,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common'
 import { ClientService } from './cliente.service'
 import { CreateClientDto } from './dto/createClient.dto'
 import { UpdateClientDto } from './dto/updateCliente.dto'
 import { Response } from 'express'
+import { RolesGuard } from '../auth/roles.service'
+import { Roles } from '../auth/roles.decorator'
 
 @Controller('client')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
-
+  
+  @UseGuards(RolesGuard)
   @Post('register')
+  @Roles('Admin')
   async create(@Body() createClientDto: CreateClientDto) {
-    return await this.clientService.createClient(createClientDto)
+    return await this.clientService.createClient(createClientDto);
   }
 
   @Put(':id')
@@ -65,11 +70,11 @@ export class ClientController {
     return await this.clientService.findAllClient()
   }
 
-    @Get('Search') 
-      async Search(@Query('q') query: string ) {
-        if (!query) return []
-        return this.clientService.SearchClients(query)
-      }
+  @Get('Search') 
+    async Search(@Query('q') query: string ) {
+      if (!query) return []
+      return this.clientService.SearchClients(query)
+    }
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

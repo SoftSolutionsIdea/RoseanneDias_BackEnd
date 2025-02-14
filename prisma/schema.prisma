@@ -27,6 +27,7 @@ model Employee {
   addressId Int
   timeId    Int
   wageId    Int
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -128,6 +129,7 @@ model Products {
   imageId      Int
   spentValueId Int
   statusId     Int
+  isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

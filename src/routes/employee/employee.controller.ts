@@ -8,6 +8,8 @@ import {
   Delete,
   Res,
   Query,
+  Patch,
+  HttpStatus,
 } from '@nestjs/common'
 import { EmployeeService } from './employee.service'
 import { CreateEmployeeDto } from './dto/createEmployee.dto'
@@ -43,6 +45,29 @@ export class EmployeeController {
       ),
     })
   }
+
+    @Patch(':id/toggle')
+    async toggleEmployeeStatus(@Param('id') id: string, @Res() res: Response) {
+      try {
+        const { message, employee } =
+          await this.employeeService.toggleEmployeeStatus(id)
+        return res.status(200).send({ message, employee })
+      } catch (error) {
+        return res.status(error.status || 500).send({ error: error.message })
+      }
+    }
+  
+    @Get('ativos')
+    async getEmployeeAtivos(@Res() res: Response) {
+      try {
+        const employee = await this.employeeService.getEmployeeAtivos()
+        return res.status(HttpStatus.OK).send(employee)
+      } catch (error) {
+        return res
+          .status(HttpStatus.INTERNAL_SERVER_ERROR)
+          .send({ error: error.message })
+      }
+    }
   
   @Get()
   async findAll() {

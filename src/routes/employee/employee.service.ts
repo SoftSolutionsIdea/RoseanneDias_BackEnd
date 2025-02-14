@@ -3,8 +3,6 @@ import { PrismaService } from '../../prisma/prisma.service'
 import { CreateEmployeeDto } from './dto/createEmployee.dto'
 import { createOrUpdate } from '../../common/helpers/createOrUpdate'
 import { updateEmployeeDto } from './dto/updateEmployee.dto'
-import { contains } from 'class-validator'
-import { time } from 'console'
 
 @Injectable()
 export class EmployeeService {
@@ -218,6 +216,37 @@ export class EmployeeService {
           },
         },
       },
+    })
+  }
+
+  async toggleEmployeeStatus(
+    id: string,
+  ): Promise<{ message: string; employee: any }> {
+    const employee = await this.prisma.employee.findUnique({
+      where: { id },
+    })
+
+    if (!employee) {
+      throw new NotFoundException('employee não encontrado')
+    }
+
+    const novoStatus = !employee.isActive
+
+    const employeeAtualizado = await this.prisma.employee.update({
+      where: { id },
+      data: { isActive: novoStatus },
+    })
+
+    const message = novoStatus
+      ? 'Employee ativado com sucesso'
+      : 'Employee desativado com sucesso'
+
+    return { message, employee: employeeAtualizado }
+  }
+
+  async getEmployeeAtivos(): Promise<any[]> {
+    return await this.prisma.employee.findMany({
+      where: { isActive: true },
     })
   }
 
