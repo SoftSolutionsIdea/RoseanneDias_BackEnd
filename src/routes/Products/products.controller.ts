@@ -71,12 +71,11 @@ export class ProductsController {
     return this.productsService.findAllProducts()
   }
 
-  @Get('Search') 
-    async Search(@Query('q') query: string ) {
-      if (!query) return []
-      return this.productsService.SearchProducts(query)
-    }
-
+  @Get('Search')
+  async Search(@Query('q') query: string) {
+    if (!query) return []
+    return this.productsService.SearchProducts(query)
+  }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

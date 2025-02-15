@@ -30,7 +30,7 @@ export class EmployeeController {
       funcionário: await this.employeeService.createEmployee(createEmployeeDto),
     })
   }
-  
+
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -46,36 +46,36 @@ export class EmployeeController {
     })
   }
 
-    @Patch(':id/toggle')
-    async toggleEmployeeStatus(@Param('id') id: string, @Res() res: Response) {
-      try {
-        const { message, employee } =
-          await this.employeeService.toggleEmployeeStatus(id)
-        return res.status(200).send({ message, employee })
-      } catch (error) {
-        return res.status(error.status || 500).send({ error: error.message })
-      }
+  @Patch(':id/toggle')
+  async toggleEmployeeStatus(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const { message, employee } =
+        await this.employeeService.toggleEmployeeStatus(id)
+      return res.status(200).send({ message, employee })
+    } catch (error) {
+      return res.status(error.status || 500).send({ error: error.message })
     }
-  
-    @Get('ativos')
-    async getEmployeeAtivos(@Res() res: Response) {
-      try {
-        const employee = await this.employeeService.getEmployeeAtivos()
-        return res.status(HttpStatus.OK).send(employee)
-      } catch (error) {
-        return res
-          .status(HttpStatus.INTERNAL_SERVER_ERROR)
-          .send({ error: error.message })
-      }
+  }
+
+  @Get('ativos')
+  async getEmployeeAtivos(@Res() res: Response) {
+    try {
+      const employee = await this.employeeService.getEmployeeAtivos()
+      return res.status(HttpStatus.OK).send(employee)
+    } catch (error) {
+      return res
+        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+        .send({ error: error.message })
     }
-  
+  }
+
   @Get()
   async findAll() {
     return await this.employeeService.findAllEmployees()
   }
 
-  @Get('Search') 
-  async Search(@Query('q') query: string ) {
+  @Get('Search')
+  async Search(@Query('q') query: string) {
     if (!query) return []
     return this.employeeService.SearchEmployee(query)
   }
@@ -89,7 +89,7 @@ export class EmployeeController {
       funcionário: await this.employeeService.deleteEmployee(id),
     })
   }
-  
+
   @Get('address')
   async findAllAddresses() {
     return await this.employeeService.findAllAddresses()

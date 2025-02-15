@@ -272,23 +272,23 @@ export class EmployeeService {
   async SearchEmployee(query: string) {
     return this.prisma.employee.findMany({
       where: {
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { telephone: { contains: query, mode: 'insensitive' } },
-        { cpf: { contains: query, mode: 'insensitive' } },
-        { time: {time: { contains: query, mode: 'insensitive'}}}
-      ],
-    },
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { telephone: { contains: query, mode: 'insensitive' } },
+          { cpf: { contains: query, mode: 'insensitive' } },
+          { time: { time: { contains: query, mode: 'insensitive' } } },
+        ],
+      },
       include: {
         address: true,
         role: true,
         time: true,
         wage: true,
       },
-    });
+    })
   }
-  
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   async deleteEmployee(id: string) {
     const employee = await this.prisma.employee.findUnique({
       where: { id },
@@ -323,7 +323,7 @@ export class EmployeeService {
 
     return employee
   }
-  
+
   async findAllAddresses() {
     return this.prisma.address.findMany({
       include: {

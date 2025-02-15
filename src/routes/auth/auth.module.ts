@@ -15,6 +15,6 @@ import { Reflector } from '@nestjs/core'
   ],
   providers: [RolesGuard, Reflector, AuthService, PrismaService],
   controllers: [AuthController],
-  exports: [RolesGuard, AuthService, JwtModule]
+  exports: [RolesGuard, AuthService, JwtModule],
 })
 export class AuthModule {}

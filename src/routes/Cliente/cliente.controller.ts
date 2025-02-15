@@ -7,62 +7,45 @@ import {
   Put,
   Delete,
   Patch,
-  Res,
-  HttpStatus,
   Query,
   UseGuards,
 } from '@nestjs/common'
 import { ClientService } from './cliente.service'
 import { CreateClientDto } from './dto/createClient.dto'
 import { UpdateClientDto } from './dto/updateCliente.dto'
-import { Response } from 'express'
 import { RolesGuard } from '../auth/roles.service'
 import { Roles } from '../auth/roles.decorator'
 
 @Controller('client')
 export class ClientController {
   constructor(private readonly clientService: ClientService) {}
-  
+
   @UseGuards(RolesGuard)
   @Post('register')
   @Roles('Admin')
   async create(@Body() createClientDto: CreateClientDto) {
-    return await this.clientService.createClient(createClientDto);
+    return await this.clientService.createClient(createClientDto)
   }
 
   @Put(':id')
   async update(
     @Param('id') id: string,
     @Body() updateClientDto: UpdateClientDto,
-    @Res() res: Response,
   ) {
-    return res.json({
+    return {
       message: 'Cliente atualizado com sucesso',
-      Cliente: await this.clientService.updateCliente(id, updateClientDto),
-    })
+      cliente: await this.clientService.updateCliente(id, updateClientDto),
+    }
   }
 
   @Patch(':id/toggle')
-  async toggleClienteStatus(@Param('id') id: string, @Res() res: Response) {
-    try {
-      const { message, cliente } =
-        await this.clientService.toggleClienteStatus(id)
-      return res.status(200).send({ message, cliente })
-    } catch (error) {
-      return res.status(error.status || 500).send({ error: error.message })
-    }
+  async toggleClienteStatus(@Param('id') id: string) {
+    return await this.clientService.toggleClienteStatus(id)
   }
 
   @Get('ativos')
-  async getClientesAtivos(@Res() res: Response) {
-    try {
-      const clientes = await this.clientService.getClientesAtivos()
-      return res.status(HttpStatus.OK).send(clientes)
-    } catch (error) {
-      return res
-        .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .send({ error: error.message })
-    }
+  async getClientesAtivos() {
+    return await this.clientService.getClientesAtivos()
   }
 
   @Get()
@@ -70,20 +53,20 @@ export class ClientController {
     return await this.clientService.findAllClient()
   }
 
-  @Get('Search') 
-    async Search(@Query('q') query: string ) {
-      if (!query) return []
-      return this.clientService.SearchClients(query)
-    }
+  @Get('Search')
+  async Search(@Query('q') query: string) {
+    if (!query) return []
+    return this.clientService.SearchClients(query)
+  }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @Res() res: Response) {
-    return res.json({
+  async delete(@Param('id') id: string) {
+    return {
       message: 'Cliente deletado com sucesso',
       cliente: await this.clientService.deleteClient(id),
-    })
+    }
   }
 
   @Get('address')

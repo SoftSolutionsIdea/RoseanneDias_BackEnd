@@ -6,6 +6,8 @@ import {
   IsNotEmpty,
   Matches,
   IsDateString,
+  IsBoolean,
+  IsOptional,
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { CreateRoleDto } from './createRole.dto'
@@ -37,6 +39,10 @@ export class CreateEmployeeDto {
 
   @IsDateString({}, { message: 'Formato inválido da data' })
   niver: string
+
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean
 
   @ValidateNested()
   @IsNotEmpty()

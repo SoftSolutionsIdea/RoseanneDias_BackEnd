@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer'
 import {
+  IsBoolean,
   IsDateString,
   IsEmail,
   IsNotEmpty,
@@ -53,6 +54,10 @@ export class CreateClientDto {
     message: 'cpf ou CNPJ precisa ser válido',
   })
   cpf_cnpj: string
+
+  @IsBoolean()
+  @IsOptional()
+  isActive?: boolean
 
   @ValidateNested()
   @IsNotEmpty()

@@ -135,7 +135,6 @@ export class ProductsService {
     }
 
     const novoStatus = !product.isActive
-
     const produtoAtualizado = await this.prisma.products.update({
       where: { id },
       data: { isActive: novoStatus },
@@ -154,8 +153,6 @@ export class ProductsService {
     })
   }
 
-
-
   async findAllProducts() {
     return this.prisma.products.findMany({
       include: {
@@ -168,25 +165,25 @@ export class ProductsService {
       },
     })
   }
-  
+
   async SearchProducts(query: string) {
     return this.prisma.products.findMany({
       where: {
-      OR: [
-        { name: { contains: query, mode: 'insensitive' } },
-        { size: { contains: query, mode: 'insensitive' } },
-        { category: {category: { contains: query, mode: 'insensitive' } }},
-        { status: {status: { contains: query, mode: 'insensitive'}}}
-      ],
-    },
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { size: { contains: query, mode: 'insensitive' } },
+          { category: { category: { contains: query, mode: 'insensitive' } } },
+          { status: { status: { contains: query, mode: 'insensitive' } } },
+        ],
+      },
       include: {
         category: true,
-        status: true
+        status: true,
       },
-    });
+    })
   }
 
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+  // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
   async deleteProduct(id: string) {
     return this.prisma.products.delete({
       where: { id },
