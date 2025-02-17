@@ -20,6 +20,7 @@ export class UpdateClientDto {
   @Matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
     message: 'Email precisa ser um endereço de gmail',
   })
+  @IsOptional()
   email?: string
 
   @IsString()
@@ -27,11 +28,11 @@ export class UpdateClientDto {
   instagram?: string
 
   @IsString()
-  @IsOptional()
   @Matches(/^\(\d{2}\) \d{4,5}-\d{4}$/, {
     message:
       'Número de telefone deve estar no formato (XX) XXXX-XXXX OU (XX) XXXXX-XXXX',
   })
+  @IsOptional()
   telephone_1?: string
 
   @IsString()
@@ -48,13 +49,14 @@ export class UpdateClientDto {
 
   @IsString()
   @Matches(/^\d{2}\.\d{3}\.\d{3}-\d{1}$/, {
-    message: 'RG precisa ser do formato XX.XXX.XXX-XX',
+    message: 'RG precisa ser do formato XX.XXX.XXX-X',
   })
+  @IsOptional()
   rg?: string
 
   @IsCPFOrCNPJ({ message: 'CPF ou CNPJ inválido!' })
   @Matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
-    message: 'cpf precisa ser do formato XXX.XXX.XXX-XX',
+    message: 'CPF precisa ser do formato XXX.XXX.XXX-XX',
   })
   @IsOptional()
   cpf_cnpj?: string

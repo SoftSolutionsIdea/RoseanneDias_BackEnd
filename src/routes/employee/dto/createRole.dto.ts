@@ -6,6 +6,6 @@ enum UserRole {
 
 export class CreateRoleDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "Cargo" não pode ser vazio' })
   role: UserRole
 }

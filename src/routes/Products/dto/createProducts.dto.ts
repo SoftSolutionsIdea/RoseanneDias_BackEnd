@@ -16,23 +16,23 @@ import { createStatusDto } from './createStatus.dto'
 
 export class CreateProductsDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "nome" não pode ser vazio' })
   name: string
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "código" não pode ser vazio' })
   code: string
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "tamanho" não pode ser vazio' })
   size: string
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "descrição" não pode ser vazio' })
   description: string
 
   @IsNumber()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "quantidade" não pode ser vazio' })
   amount: number
 
   @IsBoolean()
@@ -40,32 +40,32 @@ export class CreateProductsDto {
   isActive?: boolean
 
   @ValidateNested()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "categoria" não pode ser vazio' })
   @Type(() => createCategoryDto)
   category: createCategoryDto
 
   @ValidateNested()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "cor" não pode ser vazio' })
   @Type(() => createColorDto)
   color: createColorDto
 
   @ValidateNested()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "imagem" não pode ser vazio' })
   @Type(() => createImageDto)
   image: createImageDto
 
   @ValidateNested()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "aluguel" não pode ser vazio' })
   @Type(() => createRentalDto)
   rental: createRentalDto
 
   @ValidateNested()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "valor gasto" não pode ser vazio' })
   @Type(() => createSpentValueDto)
   spentValue: createSpentValueDto
 
   @ValidateNested()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "status" não pode ser vazio' })
   @Type(() => createStatusDto)
   status: createStatusDto
 }

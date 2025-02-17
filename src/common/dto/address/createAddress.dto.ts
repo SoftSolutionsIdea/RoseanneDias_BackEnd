@@ -16,7 +16,7 @@ export class CreateAddressDto {
   id?: number
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "Número" não pode ser vazio'})
   num: string
 
   @IsString()
@@ -24,22 +24,27 @@ export class CreateAddressDto {
   complement?: string
 
   @ValidateNested()
+  @IsNotEmpty({ message: 'O campo "CEP" não pode ser vazio'})
   @Type(() => CreateCepDto)
   cep: CreateCepDto
 
   @ValidateNested()
+  @IsNotEmpty({ message: 'O campo "Cidade" não pode ser vazio'})
   @Type(() => CreateStreetDto)
   street: CreateStreetDto
 
   @ValidateNested()
+  @IsNotEmpty({ message: 'O campo "Bairro" não pode ser vazio'})
   @Type(() => CreateBairroDto)
   bairro: CreateBairroDto
 
   @ValidateNested()
+  @IsNotEmpty({ message: 'O campo "Estado" não pode ser vazio'})
   @Type(() => CreateStateDto)
   state: CreateStateDto
 
   @ValidateNested()
+  @IsNotEmpty({ message: 'O campo "Cidade" não pode ser vazio'})
   @Type(() => CreateCityDto)
   city: CreateCityDto
 }

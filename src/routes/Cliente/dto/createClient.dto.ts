@@ -15,9 +15,10 @@ import { CreateMeasurementsDto } from './createMeasurementsDto'
 
 export class CreateClientDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo "nome" não pode ser vazio'})
   name: string
 
+  @IsNotEmpty({ message: 'O campo "Email" não pode ser vazio'})
   @IsEmail({}, { message: 'Email inválido' })
   @Matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
     message: 'Email precisa ser um endereço de gmail',
@@ -28,6 +29,7 @@ export class CreateClientDto {
   @IsOptional()
   instagram: string
 
+  @IsNotEmpty({ message: 'O campo "Telefone" não pode ser vazio'})
   @IsString()
   @Matches(/^\(\d{2}\) \d{4,5}-\d{4}$/, {
     message:
@@ -46,12 +48,14 @@ export class CreateClientDto {
   @IsDateString({}, { message: 'Formato inválido da data' })
   niver: string
 
+  @IsNotEmpty({ message: 'O campo "RG" não pode ser vazio'})
   @IsString()
   rg: string
 
+  @IsNotEmpty({ message: 'O campo "CPF ou CNPJ" não pode ser vazio'})
   @IsCPFOrCNPJ({ message: 'CPF ou CNPJ inválido!' })
   @Matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
-    message: 'cpf ou CNPJ precisa ser válido',
+    message: 'cpf ou CNPJ precisa ser válido, precisa estar no formato (000.000.000-00)',
   })
   cpf_cnpj: string
 
