@@ -356,6 +356,33 @@ export class ClientService {
     }
   }
 
+  async findClient(id: string) {
+    try {
+      return await this.prisma.client.findUnique({
+        where: { id},
+        include: {
+          measurements: true,
+          addressCli: {
+            include: {
+              cepCli: true,
+              streetCli: true,
+              cityCli: true,
+              stateCli: true,
+              bairroCli: true,
+            },
+          },
+        },
+      })
+    } catch (error) {
+      throw new InternalServerErrorException(
+        `Erro ao buscar clientes: ${error.message}`,
+      )
+    }
+  }
+
+
+
+
   async SearchClients(query: string) {
     try {
       return await this.prisma.client.findMany({

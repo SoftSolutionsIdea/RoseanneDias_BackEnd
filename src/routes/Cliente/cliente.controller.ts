@@ -52,6 +52,11 @@ export class ClientController {
   async findAll() {
     return await this.clientService.findAllClient()
   }
+  
+  @Get(':id')
+  async findUnique(@Param('id') id: string) { 
+    return await this.clientService.findClient(id)
+  }
 
   @Get('Search')
   async Search(@Query('q') query: string) {

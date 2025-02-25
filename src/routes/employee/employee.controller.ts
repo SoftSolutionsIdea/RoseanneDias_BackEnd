@@ -45,6 +45,11 @@ export class EmployeeController {
     return await this.employeeService.findAllEmployees();
   }
 
+  @Get(':id')
+  async findUnique(@Param('id') id: string) {
+    return await this.employeeService.findEmployee(id);
+  }
+
   @Get('Search')
   async Search(@Query('q') query: string) {
     if (!query) return [];

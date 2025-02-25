@@ -18,7 +18,7 @@ export class ErrorsFilter implements ExceptionFilter {
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let message = 'Estamos nos mobilizando para solucionar este erro';
-    let received = 'Campo com caracteres inválidos';
+    let received = '';
     let errors = [];
 
     if (exception instanceof PrismaClientKnownRequestError) {
@@ -35,14 +35,11 @@ export class ErrorsFilter implements ExceptionFilter {
       status = HttpStatus.BAD_REQUEST;
       const errorResponse = exception.getResponse() as any;
 
-      // Verifica se a resposta de erro está no formato esperado (array de erros)
       if (errorResponse && Array.isArray(errorResponse.message)) {
-        // Aqui estamos mapeando os erros para garantir que cada erro tenha a estrutura correta
         errors = errorResponse.message.map((errorMessage: any) => {
           return { message: errorMessage };
         });
 
-        // Ajustando a propriedade `message` para ser uma mensagem padrão
         message = 'Dados inválidos ou faltando. Verifique os campos enviados.';
         received = 'Erro de validação';
       } else {
@@ -87,13 +84,12 @@ export class ErrorsFilter implements ExceptionFilter {
       }
     }
 
-    // Resposta personalizada
     response.status(status).json({
       statusCode: status,
       message,
-      errorrecebido: received, // Inclui a mensagem de erro específica
+      errorrecebido: received, 
       error: exception.name || 'Erro interno do servidor',
-      errors, // Inclui os erros de validação detalhados
+      errors, 
       ...(process.env.NODE_ENV === 'development' && { stack: exception.stack }),
     });
   }

@@ -288,6 +288,30 @@ export class EmployeeService {
     }
   }
 
+  async findEmployee(id: string) {
+    try {
+      return this.prisma.employee.findUnique({
+        where: { id },
+        include: {
+          role: true,
+          address: {
+            include: {
+              bairro: true,
+              cep: true,
+              city: true,
+              state: true,
+              street: true,
+            },
+          },
+          time: true,
+          wage: true,
+        },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao listar todos os funcionários', error.message);
+    }
+  }
+
   async SearchEmployee(query: string) {
     try {
       return this.prisma.employee.findMany({

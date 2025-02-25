@@ -108,6 +108,17 @@ export class ProductsService {
     }
   }
 
+  async findProduct(id) {
+    try {
+      return await this.prisma.products.findUnique({ 
+        where: {id},
+        include: { rental: true, category: true, color: true, image: true, spentValue: true, status: true },
+      });
+    } catch (error) {
+      throw new InternalServerErrorException('Erro ao buscar produtos');
+    }
+  }
+
   async SearchProducts(query: string) {
     try {
       return await this.prisma.products.findMany({

@@ -45,6 +45,11 @@ export class ProductsController {
     return this.productsService.findAllProducts();
   }
 
+  @Get()
+  async getProduct(@Param('id') id: string) {
+    return this.productsService.findProduct(id);
+  }
+
   @Get('search')
   async search(@Query('q') query: string) {
     if (!query) return [];
