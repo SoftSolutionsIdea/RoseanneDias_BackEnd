@@ -48,9 +48,6 @@ export class UpdateClientDto {
   niver?: string
 
   @IsString()
-  @Matches(/^\d{2}\.\d{3}\.\d{3}-\d{1}$/, {
-    message: 'RG precisa ser do formato XX.XXX.XXX-X',
-  })
   @IsOptional()
   rg?: string
 
@@ -64,7 +61,7 @@ export class UpdateClientDto {
   @ValidateNested()
   @IsOptional()
   @Type(() => CreateAddressDto)
-  addressCli?: CreateAddressDto
+  address?: CreateAddressDto
 
   @ValidateNested()
   @IsOptional()

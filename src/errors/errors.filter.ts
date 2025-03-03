@@ -8,7 +8,7 @@ import {
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { HttpErrors, PrismaErrors } from './globalErrors';
 
-@Catch()
+@Catch(PrismaClientKnownRequestError, BadRequestException, Error)
 export class ErrorsFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const context = host.switchToHttp();

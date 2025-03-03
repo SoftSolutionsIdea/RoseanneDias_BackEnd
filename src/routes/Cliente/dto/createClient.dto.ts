@@ -66,7 +66,7 @@ export class CreateClientDto {
   @ValidateNested()
   @IsNotEmpty()
   @Type(() => CreateAddressDto)
-  addressCli: CreateAddressDto
+  address: CreateAddressDto
 
   @ValidateNested()
   @IsOptional()

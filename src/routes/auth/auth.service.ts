@@ -21,6 +21,12 @@ export class AuthService {
         HttpStatus.NOT_FOUND,
       )
     }
+    if (user.isActive === false) {
+      throw new HttpException(
+        'Usuário desativado, entre em contato com o administrador!',
+        HttpStatus.UNAUTHORIZED
+      )
+    }
     if (user.cpf === cpf) {
       const payload = { email: user.email, id: user.id, role: user.role.role }
       const token = this.jwtService.sign(payload)

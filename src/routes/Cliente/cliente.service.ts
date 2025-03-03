@@ -17,53 +17,53 @@ export class ClientService {
   async createClient(data: CreateClientDto) {
     try {
       const cep = await createOrUpdate(
-        this.prisma.cepCli,
-        { cep: data.addressCli.cep.cep },
-        { cep: data.addressCli.cep.cep },
+        this.prisma.cep,
+        { cep: data.address.cep.cep },
+        { cep: data.address.cep.cep },
       )
       const street = await createOrUpdate(
-        this.prisma.streetCli,
-        { street: data.addressCli.street.street },
-        { street: data.addressCli.street.street },
+        this.prisma.street,
+        { street: data.address.street.street },
+        { street: data.address.street.street },
       )
       const city = await createOrUpdate(
-        this.prisma.cityCli,
-        { city: data.addressCli.city.city },
-        { city: data.addressCli.city.city },
+        this.prisma.city,
+        { city: data.address.city.city },
+        { city: data.address.city.city },
       )
       const state = await createOrUpdate(
-        this.prisma.stateCli,
-        { state: data.addressCli.state.state },
-        { state: data.addressCli.state.state },
+        this.prisma.state,
+        { state: data.address.state.state },
+        { state: data.address.state.state },
       )
       const bairro = await createOrUpdate(
-        this.prisma.bairroCli,
-        { bairro: data.addressCli.bairro.bairro },
-        { bairro: data.addressCli.bairro.bairro },
+        this.prisma.bairro,
+        { bairro: data.address.bairro.bairro },
+        { bairro: data.address.bairro.bairro },
       )
 
-      let address = await this.prisma.addressCli.findFirst({
+      let address = await this.prisma.address.findFirst({
         where: {
-          num: data.addressCli.num,
-          complement: data.addressCli.complement,
-          streetCliId: street.id,
-          cepCliId: cep.id,
-          cityCliId: city.id,
-          stateCliId: state.id,
-          bairroCliId: bairro.id,
+          num: data.address.num,
+          complement: data.address.complement,
+          streetId: street.id,
+          cepId: cep.id,
+          cityId: city.id,
+          stateId: state.id,
+          bairroId: bairro.id,
         },
       })
 
       if (!address) {
-        address = await this.prisma.addressCli.create({
+        address = await this.prisma.address.create({
           data: {
-            num: data.addressCli.num,
-            complement: data.addressCli.complement,
-            streetCliId: street.id,
-            cepCliId: cep.id,
-            cityCliId: city.id,
-            stateCliId: state.id,
-            bairroCliId: bairro.id,
+            num: data.address.num,
+            complement: data.address.complement,
+            streetId: street.id,
+            cepId: cep.id,
+            cityId: city.id,
+            stateId: state.id,
+            bairroId: bairro.id,
           },
         })
       }
@@ -78,7 +78,7 @@ export class ClientService {
           telephone_1: data.telephone_1,
           telephone_2: data.telephone_2,
           niver: data.niver,
-          addressCliId: address.id,
+          addressId: address.id,
           measurements: data.measurements
             ? {
                 create: {
@@ -105,13 +105,13 @@ export class ClientService {
         },
         include: {
           measurements: true,
-          addressCli: {
+          address: {
             include: {
-              bairroCli: true,
-              cepCli: true,
-              cityCli: true,
-              stateCli: true,
-              streetCli: true,
+              bairro: true,
+              cep: true,
+              city: true,
+              state: true,
+              street: true,
             },
           },
         },
@@ -133,68 +133,68 @@ export class ClientService {
         throw new Error('Cliente não encontrado.')
       }
       const cep = await createOrUpdate(
-        this.prisma.cepCli,
-        { cep: data.addressCli.cep.cep },
-        { cep: data.addressCli.cep.cep },
+        this.prisma.cep,
+        { cep: data.address.cep.cep },
+        { cep: data.address.cep.cep },
       )
       const street = await createOrUpdate(
-        this.prisma.streetCli,
-        { street: data.addressCli.street.street },
-        { street: data.addressCli.street.street },
+        this.prisma.street,
+        { street: data.address.street.street },
+        { street: data.address.street.street },
       )
       const city = await createOrUpdate(
-        this.prisma.cityCli,
-        { city: data.addressCli.city.city },
-        { city: data.addressCli.city.city },
+        this.prisma.city,
+        { city: data.address.city.city },
+        { city: data.address.city.city },
       )
       const state = await createOrUpdate(
-        this.prisma.stateCli,
-        { state: data.addressCli.state.state },
-        { state: data.addressCli.state.state },
+        this.prisma.state,
+        { state: data.address.state.state },
+        { state: data.address.state.state },
       )
       const bairro = await createOrUpdate(
-        this.prisma.bairroCli,
-        { bairro: data.addressCli.bairro.bairro },
-        { bairro: data.addressCli.bairro.bairro },
+        this.prisma.bairro,
+        { bairro: data.address.bairro.bairro },
+        { bairro: data.address.bairro.bairro },
       )
 
       let address
-      if (data.addressCli.id) {
-        address = await this.prisma.addressCli.update({
-          where: { id: data.addressCli.id },
+      if (data.address.id) {
+        address = await this.prisma.address.update({
+          where: { id: data.address.id },
           data: {
-            num: data.addressCli.num,
-            complement: data.addressCli.complement,
-            streetCliId: street.id,
-            cepCliId: cep.id,
-            cityCliId: city.id,
-            stateCliId: state.id,
-            bairroCliId: bairro.id,
+            num: data.address.num,
+            complement: data.address.complement,
+            streetId: street.id,
+            cepId: cep.id,
+            cityId: city.id,
+            stateId: state.id,
+            bairroId: bairro.id,
           },
         })
       } else {
-        address = await this.prisma.addressCli.findFirst({
+        address = await this.prisma.address.findFirst({
           where: {
-            num: data.addressCli.num,
-            complement: data.addressCli.complement,
-            streetCliId: street.id,
-            cepCliId: cep.id,
-            cityCliId: city.id,
-            stateCliId: state.id,
-            bairroCliId: bairro.id,
+            num: data.address.num,
+            complement: data.address.complement,
+            streetId: street.id,
+            cepId: cep.id,
+            cityId: city.id,
+            stateId: state.id,
+            bairroId: bairro.id,
           },
         })
 
         if (!address) {
-          address = await this.prisma.addressCli.create({
+          address = await this.prisma.address.create({
             data: {
-              num: data.addressCli.num,
-              complement: data.addressCli.complement,
-              streetCliId: street.id,
-              cepCliId: cep.id,
-              cityCliId: city.id,
-              stateCliId: state.id,
-              bairroCliId: bairro.id,
+              num: data.address.num,
+              complement: data.address.complement,
+              streetId: street.id,
+              cepId: cep.id,
+              cityId: city.id,
+              stateId: state.id,
+              bairroId: bairro.id,
             },
           })
         }
@@ -209,28 +209,21 @@ export class ClientService {
           data: {
             ombro: data.measurements?.ombro ?? existingMeasurement.ombro,
             busto: data.measurements?.busto ?? existingMeasurement.busto,
-            coOmbroCintura:
-              data.measurements?.coOmbroCintura ??
-              existingMeasurement.coOmbroCintura,
-            coOmbroCos:
-              data.measurements?.coOmbroCos ?? existingMeasurement.coOmbroCos,
-            coCorpoTQC:
-              data.measurements?.coCorpoTQC ?? existingMeasurement.coCorpoTQC,
+            coOmbroCintura: data.measurements?.coOmbroCintura ?? existingMeasurement.coOmbroCintura,
+            coOmbroCos: data.measurements?.coOmbroCos ?? existingMeasurement.coOmbroCos,
+            coCorpoTQC: data.measurements?.coCorpoTQC ?? existingMeasurement.coCorpoTQC,
             cintura: data.measurements?.cintura ?? existingMeasurement.cintura,
             cos: data.measurements?.cos ?? existingMeasurement.cos,
             quadril: data.measurements?.quadril ?? existingMeasurement.quadril,
-            SaiaCurta:
-              data.measurements?.SaiaCurta ?? existingMeasurement.SaiaCurta,
-            SaiaLonga:
-              data.measurements?.SaiaLonga ?? existingMeasurement.SaiaLonga,
+            SaiaCurta: data.measurements?.SaiaCurta ?? existingMeasurement.SaiaCurta,
+            SaiaLonga: data.measurements?.SaiaLonga ?? existingMeasurement.SaiaLonga,
             Short: data.measurements?.Short ?? existingMeasurement.Short,
             Calca: data.measurements?.Calca ?? existingMeasurement.Calca,
             Vestido: data.measurements?.Vestido ?? existingMeasurement.Vestido,
             Manga: data.measurements?.Manga ?? existingMeasurement.Manga,
             punho: data.measurements?.punho ?? existingMeasurement.punho,
             Frente: data.measurements?.Frente ?? existingMeasurement.Frente,
-            OmbroAOmbro:
-              data.measurements?.OmbroAOmbro ?? existingMeasurement.OmbroAOmbro,
+            OmbroAOmbro: data.measurements?.OmbroAOmbro ?? existingMeasurement.OmbroAOmbro,
           },
         })
       } else if (data.measurements) {
@@ -268,17 +261,17 @@ export class ClientService {
           telephone_1: data.telephone_1,
           telephone_2: data.telephone_2,
           niver: data.niver,
-          addressCliId: address.id,
+          addressId: address.id,
         },
         include: {
           measurements: true,
-          addressCli: {
+          address: {
             include: {
-              bairroCli: true,
-              cepCli: true,
-              cityCli: true,
-              stateCli: true,
-              streetCli: true,
+              bairro: true,
+              cep: true,
+              city: true,
+              state: true,
+              street: true,
             },
           },
         },
@@ -338,13 +331,13 @@ export class ClientService {
       return await this.prisma.client.findMany({
         include: {
           measurements: true,
-          addressCli: {
+          address: {
             include: {
-              cepCli: true,
-              streetCli: true,
-              cityCli: true,
-              stateCli: true,
-              bairroCli: true,
+              cep: true,
+              street: true,
+              city: true,
+              state: true,
+              bairro: true,
             },
           },
         },
@@ -362,13 +355,13 @@ export class ClientService {
         where: { id},
         include: {
           measurements: true,
-          addressCli: {
+          address: {
             include: {
-              cepCli: true,
-              streetCli: true,
-              cityCli: true,
-              stateCli: true,
-              bairroCli: true,
+              cep: true,
+              street: true,
+              city: true,
+              state: true,
+              bairro: true,
             },
           },
         },
@@ -409,7 +402,7 @@ export class ClientService {
       const client = await this.prisma.client.findUnique({
         where: { id },
         include: {
-          addressCli: true,
+          address: true,
           measurements: true,
         },
       })
@@ -422,9 +415,9 @@ export class ClientService {
         where: { id },
       })
 
-      if (client.addressCli) {
-        await this.prisma.addressCli.delete({
-          where: { id: client.addressCli.id },
+      if (client.address) {
+        await this.prisma.address.delete({
+          where: { id: client.address.id },
         })
       }
 
@@ -444,22 +437,22 @@ export class ClientService {
         throw new BadRequestException('ID inválido')
       }
 
-      const addressCli = await this.prisma.addressCli.findUnique({
+      const addressCli = await this.prisma.address.findUnique({
         where: { id: numericId },
-        include: { client: true },
+        include: { Client: true },
       })
 
       if (!addressCli) {
         throw new NotFoundException('Endereço não encontrado')
       }
 
-      if (addressCli.client && addressCli.client.length > 0) {
+      if (addressCli.Client && addressCli.Client.length > 0) {
         throw new ConflictException(
           'Endereço não pode ser deletado pois está associado a um cliente',
         )
       }
 
-      await this.prisma.addressCli.delete({
+      await this.prisma.address.delete({
         where: { id: numericId },
       })
 
@@ -473,13 +466,13 @@ export class ClientService {
 
   async findAllAddresses() {
     try {
-      return await this.prisma.addressCli.findMany({
+      return await this.prisma.address.findMany({
         include: {
-          cepCli: true,
-          streetCli: true,
-          cityCli: true,
-          stateCli: true,
-          bairroCli: true,
+          cep: true,
+          street: true,
+          city: true,
+          state: true,
+          bairro: true,
         },
       })
     } catch (error) {

@@ -314,7 +314,7 @@ export class EmployeeService {
 
   async SearchEmployee(query: string) {
     try {
-      return this.prisma.employee.findMany({
+      const result = await this.prisma.employee.findMany({
         where: {
           OR: [
             { name: { contains: query, mode: 'insensitive' } },
@@ -330,6 +330,7 @@ export class EmployeeService {
           wage: true,
         },
       });
+      return result;
     } catch (error) {
       throw new InternalServerErrorException('Erro ao realizar a busca de funcionários', error.message);
     }

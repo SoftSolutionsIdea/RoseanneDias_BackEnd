@@ -22,11 +22,17 @@ export class ClientController {
 
   @UseGuards(RolesGuard)
   @Post('register')
-  @Roles('Admin')
+
   async create(@Body() createClientDto: CreateClientDto) {
     return await this.clientService.createClient(createClientDto)
   }
 
+  @Get('Search')
+  async Search(@Query('q') query: string) {
+    if (!query) return await this.clientService.findAllClient()
+    return await this.clientService.SearchClients(query)
+  }
+  
   @Put(':id')
   async update(
     @Param('id') id: string,
@@ -56,12 +62,6 @@ export class ClientController {
   @Get(':id')
   async findUnique(@Param('id') id: string) { 
     return await this.clientService.findClient(id)
-  }
-
-  @Get('Search')
-  async Search(@Query('q') query: string) {
-    if (!query) return []
-    return this.clientService.SearchClients(query)
   }
 
   // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

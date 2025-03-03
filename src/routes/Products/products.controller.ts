@@ -23,6 +23,12 @@ export class ProductsController {
     return { message: 'Produto cadastrado com sucesso!', produto };
   }
 
+  @Get('search')
+  async search(@Query('q') query: string) {
+    if (!query) return await this.productsService.findAllProducts();
+    return await this.productsService.SearchProducts(query);
+  }
+  
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateProductsDto: updateProductsDto) {
     const produto = await this.productsService.updateProducts(id, updateProductsDto);
@@ -45,16 +51,11 @@ export class ProductsController {
     return this.productsService.findAllProducts();
   }
 
-  @Get()
+  @Get(':id')
   async getProduct(@Param('id') id: string) {
     return this.productsService.findProduct(id);
   }
 
-  @Get('search')
-  async search(@Query('q') query: string) {
-    if (!query) return [];
-    return this.productsService.SearchProducts(query);
-  }
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- PARA TESTES -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 

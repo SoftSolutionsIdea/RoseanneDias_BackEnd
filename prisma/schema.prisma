@@ -32,7 +32,7 @@ model Employee {
   updatedAt DateTime @updatedAt
 
   role    Role    @relation(fields: [roleId], references: [id])
-  address Address @relation(fields: [addressId], references: [id])
+  address Address @relation("EmployeeAddress", fields: [addressId], references: [id])
   time    Time    @relation(fields: [timeId], references: [id])
   wage    Wage    @relation(fields: [wageId], references: [id])
 
@@ -55,7 +55,8 @@ model Address {
   state  State  @relation(fields: [stateId], references: [id])
   city   City   @relation(fields: [cityId], references: [id])
 
-  Employee Employee[]
+  Employee Employee[] @relation("EmployeeAddress")
+  Client  Client[] @relation("ClientAddress")
 }
 
 model Street {
@@ -198,72 +199,16 @@ model Client {
   niver        String
   rg           String   @unique
   cpf_cnpj     String   @unique
-  addressCliId Int
+  addressId    Int
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  addressCli AddressCli @relation(fields: [addressCliId], references: [id])
+  address Address @relation("ClientAddress", fields: [addressId], references: [id])
   measurements Measurements?
   contracts Contract[]
 
   @@map("client")
-}
-
-model AddressCli {
-  id          Int     @id @default(autoincrement())
-  num         String
-  complement  String?
-  streetCliId Int
-  cepCliId    Int
-  bairroCliId Int
-  stateCliId  Int
-  cityCliId   Int
-
-  streetCli StreetCli @relation(fields: [streetCliId], references: [id])
-  cepCli    CepCli    @relation(fields: [cepCliId], references: [id])
-  bairroCli BairroCli @relation(fields: [bairroCliId], references: [id])
-  stateCli  StateCli  @relation(fields: [stateCliId], references: [id])
-  cityCli   CityCli   @relation(fields: [cityCliId], references: [id])
-  
-  client Client[]
-
-  @@map("addressCli")
-}
-
-model StreetCli {
-  id     Int    @id @default(autoincrement())
-  street String @unique
-
-  AddressCli AddressCli[]
-}
-
-model CepCli {
-  id  Int    @id @default(autoincrement())
-  cep String @unique
-
-  AddressCli AddressCli[]
-}
-
-model BairroCli {
-  id     Int    @id @default(autoincrement())
-  bairro String @unique
-
-  AddressCli AddressCli[]
-}
-
-model StateCli {
-  id    Int    @id @default(autoincrement())
-  state String @unique
-
-  AddressCli AddressCli[]
-}
-
-model CityCli {
-  id   Int    @id @default(autoincrement())
-  city String @unique
-
-  AddressCli AddressCli[]
 }
 
 model Measurements {
@@ -360,3 +305,5 @@ model ContractStatus {
 
   contracts Contract[]
 }
+
+

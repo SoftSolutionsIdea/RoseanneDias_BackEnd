@@ -29,7 +29,7 @@ export class CreateEmployeeDto {
   email: string
 
   @IsNotEmpty({ message: 'O campo "CPF" não pode ser vazio' })
-  @IsCPFOrCNPJ({ message: 'CPF ou CNPJ inválido!' })
+  @IsCPFOrCNPJ({ message: 'CPF inválido!' })
   @Matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
     message: 'CPF precisa estar no formato válido (000.000.000-00)',
   })
