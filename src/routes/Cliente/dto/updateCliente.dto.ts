@@ -2,6 +2,7 @@ import { Type } from 'class-transformer'
 import {
   IsDateString,
   IsEmail,
+  IsNotEmpty,
   IsOptional,
   IsString,
   Matches,
@@ -13,14 +14,13 @@ import { CreateMeasurementsDto } from './createMeasurementsDto'
 
 export class UpdateClientDto {
   @IsString()
-  @IsOptional()
+  @IsNotEmpty({ message: 'O campo "nome" não pode ser vazio'})
   name?: string
 
   @IsEmail({}, { message: 'Email inválido' })
   @Matches(/^[a-zA-Z0-9._%+-]+@gmail\.com$/, {
     message: 'Email precisa ser um endereço de gmail',
   })
-  @IsOptional()
   email?: string
 
   @IsString()
@@ -32,7 +32,6 @@ export class UpdateClientDto {
     message:
       'Número de telefone deve estar no formato (XX) XXXX-XXXX OU (XX) XXXXX-XXXX',
   })
-  @IsOptional()
   telephone_1?: string
 
   @IsString()
@@ -44,18 +43,17 @@ export class UpdateClientDto {
   telephone_2?: string
 
   @IsDateString({}, { message: 'Formato inválido da data' })
-  @IsOptional()
   niver?: string
 
   @IsString()
-  @IsOptional()
+  @IsNotEmpty({ message: 'O campo "rg" não pode ser vazio'})
   rg?: string
 
   @IsCPFOrCNPJ({ message: 'CPF ou CNPJ inválido!' })
   @Matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, {
     message: 'CPF precisa ser do formato XXX.XXX.XXX-XX',
   })
-  @IsOptional()
+  @IsNotEmpty({ message: 'O campo "cpf/cnpj" não pode ser vazio'})
   cpf_cnpj?: string
 
   @ValidateNested()
