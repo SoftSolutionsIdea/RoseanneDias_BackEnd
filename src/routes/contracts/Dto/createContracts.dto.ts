@@ -9,7 +9,7 @@ import {
 } from 'class-validator'
 import { Type } from 'class-transformer'
 import { UserStatus } from '@prisma/client'
-import { CreateContractProductDto } from './createcontractProduct.dto'
+import { CreateContractProductDto } from './createContractProduct.dto'
 import { CreateContractPaymentDto } from './createPayment.dto'
 
 export class CreateContractDto {
